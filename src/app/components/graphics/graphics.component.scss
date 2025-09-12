@@ -1,0 +1,14 @@
+.chart-container {
+  width: 400px;   /* 👈 más pequeño */
+  height: 300px;  /* ajusta alto */
+  margin-left: 0; /* alineado a la izquierda */
+  padding: 1rem;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+
+  h2 {
+    margin-bottom: 1rem;
+  }
+}
+

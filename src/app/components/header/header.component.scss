@@ -1,0 +1,46 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.8rem 1.5rem;
+  background: #878f96;
+  color: #fff;
+
+  .logo {
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+
+  .nav {
+    display: flex;
+    gap: 1rem;
+
+    ::ng-deep .p-button {
+      border: none;
+      color: white;
+    }
+
+    ::ng-deep .p-button:hover {
+      background: #2980b9;
+    }
+  }
+
+  .actions {
+    display: flex;
+    gap: 0.8rem;
+
+    ::ng-deep .p-button {
+      border-radius: 8px;
+    }
+
+    ::ng-deep .p-button-rounded {
+      background: transparent;
+      border: none;
+      color: white;
+    }
+
+    ::ng-deep .p-button-rounded:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+  }
+}

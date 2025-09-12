@@ -1,0 +1,17 @@
+<header class="header">
+  <!-- Logo -->
+  <div class="logo">🔧 HapticTool</div>
+
+  <!-- Navegación centrada -->
+  <nav class="nav">
+    <p-button label="Acerca de" (onClick)="goTo('/')"></p-button>
+    <p-button label="Gráficas" (onClick)="goTo('/graficas')"></p-button>
+    <p-button label="Cargar Archivos" (onClick)="goTo('/cargar-archivos')"></p-button>
+  </nav>
+
+  <!-- Botones a la derecha -->
+    <div class="actions">
+    <p-button label="Iniciar Sesión" styleClass="p-button-outlined" (onClick)="goTo('/Inicio-sesión')"></p-button>
+    <p-button icon="pi pi-cog" class="p-button-rounded p-button-text"></p-button>
+    </div>
+</header>
