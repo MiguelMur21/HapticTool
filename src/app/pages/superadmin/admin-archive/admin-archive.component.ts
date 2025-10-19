@@ -1,24 +1,52 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ApiService } from '../../services/api.service';
+import { ApiService } from '../../../services/api.service';
+import { FormsModule } from '@angular/forms';
+import { DropdownModule } from 'primeng/dropdown';
+import { TableModule } from 'primeng/table';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ButtonModule } from 'primeng/button';
 
 @Component({
-  selector: 'app-upload-files',
+  selector: 'app-admin-archive',
   standalone: true,
-  imports: [CommonModule, ButtonModule],
-  templateUrl: './upload-files.component.html',
-  styleUrls: ['./upload-files.component.scss']
+  imports: [CommonModule, FormsModule, ButtonModule, DropdownModule, TableModule],
+  templateUrl: './admin-archive.component.html',
+  styleUrl: './admin-archive.component.scss'
 })
-export class UploadFilesComponent {
-  
+export class AdminArchiveComponent {
+ // 📂 Variables principales
   selectedFile: File | null = null;
   message: string = '';
   messageType: 'success' | 'error' | '' = '';
+  files: any[] = []; // Aquí llegarán los datos del backend
 
   constructor(private apiService: ApiService) {}
 
+  // 🔹 Cargar archivos al iniciar
+  ngOnInit(): void {
+    this.loadFiles();
+  }
+
+  // 📥 Llamada al backend para obtener los archivos
+  loadFiles() {
+    this.apiService.getFiles().subscribe({
+      next: (data: any[]) => {
+        this.files = data;
+      },
+      error: (error: HttpErrorResponse) => {
+        console.error('Error al cargar archivos:', error);
+      }
+    });
+  }
+
+  // 🖱 Simula clic en input oculto
+  triggerFileInput() {
+    const input = document.getElementById('fileInput') as HTMLInputElement;
+    input.click();
+  }
+
+  // ✅ Verifica tipo permitido (solo CSV y C3D)
   onFileSelected(event: any) {
     const file = event.target.files[0];
     if (!file) return;
@@ -35,9 +63,9 @@ export class UploadFilesComponent {
 
     this.selectedFile = file;
     this.message = '';
-    this.messageType = '';
   }
 
+  // 🚀 Subir archivo
   onUpload() {
     if (!this.selectedFile) {
       this.message = '⚠️ Selecciona un archivo antes de subirlo.';
@@ -59,18 +87,19 @@ export class UploadFilesComponent {
         this.message = `✅ Archivo "${this.selectedFile?.name}" subido con éxito.`;
         this.messageType = 'success';
         this.selectedFile = null;
+        this.loadFiles(); // 🔁 Recargar lista al subir
       },
       error: (error: HttpErrorResponse) => {
         this.message =
-          error.error?.detail || '❌ Ocurrió un error al procesar el archivo.';
+          error.error?.detail || '❌ Error al subir el archivo.';
         this.messageType = 'error';
       }
     });
   }
 
+  // ❌ Cancelar selección
   onCancel() {
     this.selectedFile = null;
-    this.messageType = 'error';
+    this.message = '';
   }
-
 }

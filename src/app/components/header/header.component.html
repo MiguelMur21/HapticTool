@@ -1,17 +1,65 @@
 <header class="header">
-  <!-- Logo -->
   <div class="logo">🔧 HapticTool</div>
 
-  <!-- Navegación centrada -->
-  <nav class="nav">
-    <p-button label="Acerca de" (onClick)="goTo('/')"></p-button>
-    <p-button label="Gráficas" (onClick)="goTo('/graficas')"></p-button>
-    <p-button label="Cargar Archivos" (onClick)="goTo('/cargar-archivos')"></p-button>
-  </nav>
+  <!-- 🌐 Header normal -->
+  <ng-container *ngIf="!isAdminView(); else adminHeader">
+    <nav class="nav">
+      <p-button label="Acerca de" (onClick)="goTo('/')"></p-button>
+      <p-button label="Gráficas" (onClick)="goTo('/graficas')"></p-button>
+      <p-button label="Cargar Archivos" (onClick)="goTo('/cargar-archivos')"></p-button>
+    </nav>
 
-  <!-- Botones a la derecha -->
     <div class="actions">
-    <p-button label="Iniciar Sesión" styleClass="p-button-outlined" (onClick)="goTo('/Inicio-sesión')"></p-button>
-    <p-button icon="pi pi-cog" class="p-button-rounded p-button-text"></p-button>
+      <ng-container *ngIf="user; else guest">
+        <span class="welcome">Bienvenido, {{ user.nombre }}</span>
+
+        <!-- 🔹 Solo para SuperAdministrador -->
+        <button 
+          *ngIf="isSuperAdmin()" 
+          class="icon-btn" 
+          (click)="goTo('/administrador')" 
+          title="Administrar usuarios y archivos">
+          <i class="fa-solid fa-user-shield"></i>
+        </button>
+
+        <!-- ⚙️ Ajustes -->
+        <button class="icon-btn" (click)="goTo('/ajustes')" title="Ajustes y privacidad">
+          <i class="fa fa-gear"></i>
+        </button>
+
+        <!-- 🚪 Cerrar sesión -->
+        <button class="icon-btn" (click)="logout()" title="Cerrar sesión">
+          <i class="fa fa-right-from-bracket"></i>
+        </button>
+      </ng-container>
+
+      <!-- Si no hay sesión -->
+      <ng-template #guest>
+        <p-button
+          label="Iniciar Sesión"
+          styleClass="p-button-outlined"
+          (onClick)="goTo('/Inicio-sesión')">
+        </p-button>
+      </ng-template>
+    </div>   
+  </ng-container>
+
+  <!-- 👑 Header del SuperAdministrador -->
+  <ng-template #adminHeader>
+    <nav class="nav admin-nav">
+      <p-button label="Usuarios" (onClick)="goTo('/administrador/usuarios')"></p-button>
+      <p-button label="Archivos" (onClick)="goTo('/administrador/archivos')"></p-button>
+      <p-button label="Logs" (onClick)="goTo('/administrador/logs')"></p-button>
+    </nav>
+
+    <div class="actions">
+      <span class="welcome">Bienvenido: {{ user?.nombre }}</span>
+        <button class="icon-btn" (click)="goTo('/ajustes')" title="Ajustes y privacidad">
+          <i class="fa fa-gear"></i>
+        </button>
+      <button class="icon-btn" (click)="logout()" title="Cerrar sesión">
+        <i class="fa fa-right-from-bracket"></i>
+      </button>
     </div>
+  </ng-template>
 </header>

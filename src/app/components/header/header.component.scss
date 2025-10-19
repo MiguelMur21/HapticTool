@@ -18,29 +18,32 @@
     ::ng-deep .p-button {
       border: none;
       color: white;
+      background: transparent;
     }
 
     ::ng-deep .p-button:hover {
-      background: #2980b9;
+      background: rgba(255, 255, 255, 0.15);
     }
   }
 
   .actions {
     display: flex;
+    align-items: center;
     gap: 0.8rem;
 
-    ::ng-deep .p-button {
-      border-radius: 8px;
+    .welcome {
+      font-weight: 500;
     }
 
     ::ng-deep .p-button-rounded {
       background: transparent;
       border: none;
       color: white;
+      font-size: 1.1rem;
     }
 
     ::ng-deep .p-button-rounded:hover {
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.15);
     }
   }
 }

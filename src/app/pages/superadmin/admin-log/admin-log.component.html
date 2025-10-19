@@ -1,0 +1,24 @@
+<div class="header">
+  <h2>Historial de Sesiones</h2>
+</div>
+
+<div class="table-container">
+  <p-table [value]="logs" [paginator]="true" [rows]="rowsPerPage"
+           [first]="first" (onPageChange)="onPageChange($event)" responsiveLayout="scroll">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>ID Usuario</th>
+        <th>Fecha/Hora de Entrada</th>
+        <th>Fecha/Hora de Salida</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-log>
+      <tr>
+        <td>{{ log.usuario_id }}</td>
+        <td>{{ log.login_time | date:'short' }}</td>
+        <td>{{ log.logout_time ? (log.logout_time | date:'short') : 'Activa' }}</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
