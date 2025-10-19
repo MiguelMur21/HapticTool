@@ -1,1 +1,42 @@
-<p>upload-files works!</p>
+<div class="upload-container">
+  <h2 class="title">Subir archivo</h2>
+
+  <!-- 📂 Botón grande -->
+  <label class="file-label">
+    <input
+      type="file"
+      accept=".csv, .c3d"
+      (change)="onFileSelected($event)"
+      hidden
+    />
+    <span>
+      {{ selectedFile ? selectedFile.name : 'Seleccionar archivo (.csv o .c3d)' }}
+    </span>
+  </label>
+
+ <!-- Botones -->
+  <div class="button-group" *ngIf="selectedFile">
+    <button
+      pButton
+      type="button"
+      label="Subir"
+      icon="pi pi-upload"
+      class="upload-btn"
+      (click)="onUpload()"
+    ></button>
+
+    <button
+      pButton
+      type="button"
+      label="Cancelar"
+      icon="pi pi-times"
+      class="cancel-btn"
+      (click)="onCancel()"
+    ></button>
+  </div>
+
+  <!-- Mensaje debajo -->
+  <div *ngIf="message" class="upload-message" [ngClass]="messageType">
+    {{ message }}
+  </div>
+</div>

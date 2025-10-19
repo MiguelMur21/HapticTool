@@ -1,0 +1,107 @@
+.about-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 20px 50px; 
+  background: #f8f9fa;
+  min-height: 80vh;
+  font-family: 'Poppins', sans-serif;
+}
+
+.main-title {
+  font-size: 5rem;
+  font-weight: 800;
+  text-align: center;
+  color: #1b1b1b;
+  margin-top: 0px; /* agrega un margen superior más pequeño */
+  margin-bottom: 100px; /* opcionalmente reduce el espacio inferior */
+  letter-spacing: 2px;
+}
+
+.about-content {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-start;
+  gap: 80px;
+  width: 95%;
+  margin: 0 auto;
+}
+
+
+/* Sección de video */
+.about-video {
+  background: #000;
+  width: 400px;
+  height: 250px;
+  border-radius: 15px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.play-button {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  border: 3px solid #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.play-button i {
+  color: white;
+  font-size: 2rem;
+}
+
+.play-button:hover {
+  background: rgba(255, 255, 255, 0.4);
+  transform: scale(1.05);
+}
+
+/* Sección de texto */
+.about-text p {
+  max-width: 1000px;
+  line-height: 1.6;
+}
+
+
+.about-text .section {
+  margin-bottom: 30px;
+}
+
+.about-text h2 {
+  font-size: 1.6rem;
+  color: #0056b3;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.about-text p {
+  line-height: 1.6;
+  font-size: 1rem;
+  color: #444;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .about-content {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .about-video {
+    width: 100%;
+    max-width: 400px;
+  }
+
+  .about-text {
+    width: 100%;
+  }
+}

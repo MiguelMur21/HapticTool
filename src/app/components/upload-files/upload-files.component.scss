@@ -1,0 +1,95 @@
+.upload-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  border: 2px dashed #ccc;
+  border-radius: 1rem;
+  background-color: #f9fafb;
+  transition: all 0.3s ease-in-out;
+
+  &:hover {
+    border-color: #007ad9;
+    background-color: #eef7ff;
+  }
+}
+
+.title {
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.file-label {
+  background-color: #007ad9;
+  color: white;
+  padding: 1rem 2rem;
+  border-radius: 0.75rem;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  text-align: center;
+  width: 100%;
+  max-width: 400px;
+
+  &:hover {
+    background-color: #005fa3;
+  }
+}
+
+.button-group {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+/* 🔹 Mensaje de confirmación o error */
+.upload-message {
+  margin-top: 1.5rem;
+  padding: 0.8rem 1.2rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+.upload-btn {
+  background-color: #16a34a !important; /* Verde principal */
+  border: none !important;
+  color: white !important;
+  font-weight: bold;
+  padding: 0.8rem 1.8rem;
+  border-radius: 0.6rem;
+  transition: background 0.3s ease;
+
+  &:hover {
+    background-color: #15803d !important;
+  }
+}
+
+/* ❌ Botón rojo (Cancelar) */
+.cancel-btn {
+  background-color: #dc2626 !important; /* Rojo principal */
+  border: none !important;
+  color: white !important;
+  font-weight: bold;
+  padding: 0.8rem 1.8rem;
+  border-radius: 0.6rem;
+  transition: background 0.3s ease;
+
+  &:hover {
+    background-color: #b91c1c !important;
+  }
+}
+.upload-message.success {
+  background-color: #d1fae5;
+  color: #065f46;
+  border: 1px solid #10b981;
+}
+
+.upload-message.error {
+  background-color: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #ef4444;
+}

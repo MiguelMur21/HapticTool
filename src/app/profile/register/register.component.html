@@ -1,34 +1,58 @@
 <div class="register-container">
-  <!-- Zona izquierda (imagen futura) -->
+  <!-- Zona izquierda (imagen o ilustración opcional) -->
   <div class="register-image">
-    <!-- Aquí luego pondrás una imagen -->
+    <!-- Aquí podrías poner una imagen decorativa -->
   </div>
 
   <!-- Zona derecha (formulario) -->
   <div class="register-form">
     <h2 class="title">Crear Cuenta</h2>
 
+    <!-- Nombre -->
+    <div class="p-field">
+      <label for="nombre">Nombre</label>
+      <input
+        id="nombre"
+        type="text"
+        pInputText
+        class="line-input"
+        placeholder="Ingresa tu nombre"
+        [(ngModel)]="nombre"
+        name="nombre"
+      />
+    </div>
+
     <!-- Correo -->
     <div class="p-field">
-      <label for="correo">Correo</label>
-      <input id="correo" type="email" pInputText class="line-input" placeholder="Ingresa tu correo">
+      <label for="email">Correo electrónico</label>
+      <input
+        id="email"
+        type="email"
+        pInputText
+        class="line-input"
+        placeholder="Ingresa tu correo"
+        [(ngModel)]="email"
+        name="email"
+      />
     </div>
 
     <!-- Contraseña -->
     <div class="p-field">
       <label for="password">Contraseña</label>
-      <input id="password" type="password" pInputText class="line-input" placeholder="Crea una contraseña">
-    </div>
-
-    <!-- Confirmar contraseña -->
-    <div class="p-field">
-      <label for="confirmPassword">Confirmar Contraseña</label>
-      <input id="confirmPassword" type="password" pInputText class="line-input" placeholder="Repite tu contraseña">
+      <input
+        id="password"
+        type="password"
+        pInputText
+        class="line-input"
+        placeholder="Crea una contraseña"
+        [(ngModel)]="password"
+        name="password"
+      />
     </div>
 
     <!-- Botón -->
     <div class="buttons">
-      <button class="btn-register">Registrarse</button>
+      <button class="btn-register" (click)="onRegister()">Registrarse</button>
     </div>
   </div>
 </div>

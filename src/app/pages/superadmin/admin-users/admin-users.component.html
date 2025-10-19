@@ -1,0 +1,109 @@
+<div class="header">
+  <h2>Usuarios Registrados ({{ totalUsers }})</h2>
+</div>
+
+<div class="create-user-section">
+  <h3>Crear nuevo investigador</h3>
+  <form (ngSubmit)="crearAdmin()" [formGroup]="nuevoAdminForm" class="create-user-form">
+    <div class="form-row">
+      <input type="text" formControlName="nombre" placeholder="Nombre completo" required />
+      <input type="email" formControlName="email" placeholder="Correo electrónico" required />
+      <input type="password" formControlName="password" placeholder="Contraseña" required />
+      <button type="submit" [disabled]="nuevoAdminForm.invalid">Crear usuario</button>
+    </div>
+  </form>
+</div>
+
+<div class="table-container">
+  <p-table 
+    [value]="users"
+    [paginator]="true"
+    [rows]="rowsPerPage"
+    [first]="first"
+    (onPageChange)="onPageChange($event)"
+    [loading]="loading"
+    responsiveLayout="scroll">
+
+    <!-- ====== ENCABEZADO DE TABLA ====== -->
+    <ng-template pTemplate="header">
+      <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Email</th>
+        <th>Rol</th>
+        <th>Acciones</th>
+      </tr>
+    </ng-template>
+
+    <!-- ====== CUERPO DE TABLA ====== -->
+    <ng-template pTemplate="body" let-user>
+      <tr>
+        <td>{{ user.usuario_id }}</td>
+        <td>
+          {{ user.nombre }}
+          <span *ngIf="user.usuario_id === currentUserId" class="tu">(tú)</span>
+        </td>
+        <td>{{ user.email }}</td>
+        <td>{{ user.rol?.nombre || 'Sin rol' }}</td>
+        <td class="acciones">
+          <button 
+            pButton 
+            label=" Cambiar contraseña" 
+            icon="pi pi-key" 
+            class="p-button-info p-button-sm"
+            (click)="openPasswordDialog(user.usuario_id)">
+          </button>
+
+          <button 
+            pButton 
+            label="Eliminar" 
+            icon="pi pi-trash" 
+            class="p-button-danger p-button-sm"
+            (click)="deleteUser(user.usuario_id)">
+          </button>
+        </td>
+      </tr>
+    </ng-template>
+
+  </p-table>
+
+  <p *ngIf="statusMessage" class="status">{{ statusMessage }}</p>
+</div>
+
+<!-- ====== DIÁLOGO PARA CAMBIAR CONTRASEÑA ====== -->
+<p-dialog 
+  header="Cambiar Contraseña" 
+  [(visible)]="showPasswordDialog" 
+  [modal]="true" 
+  [closable]="true"
+  [style]="{ width: '400px' }">
+
+  <div class="p-fluid">
+    <label for="newPassword" class="block mb-2">Nueva Contraseña</label>
+    <input 
+      type="password" 
+      id="newPassword" 
+      pInputText 
+      [(ngModel)]="newPassword" 
+      placeholder="Ingrese nueva contraseña"
+      class="w-full mb-3" />
+
+    <div class="dialog-buttons">
+      <button 
+        pButton 
+        label="Actualizar" 
+        icon="pi pi-check" 
+        class="p-button-success" 
+        (click)="updatePassword()">
+      </button>
+
+      <button 
+        pButton 
+        label="Cancelar" 
+        icon="pi pi-times" 
+        class="p-button-secondary" 
+        (click)="showPasswordDialog = false">
+      </button>
+    </div>
+  </div>
+</p-dialog>

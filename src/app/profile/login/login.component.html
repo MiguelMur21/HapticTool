@@ -6,33 +6,42 @@
 
   <!-- Zona derecha (formulario) -->
   <div class="login-form">
-    <h2 class="title">Iniciar Sesión</h2>
+  <h2 class="title">Iniciar Sesión</h2>
 
-    <!-- Usuario -->
+  <form (ngSubmit)="login()" #loginForm="ngForm">
+    <!-- Correo -->
     <div class="p-field">
-      <label for="usuario">Usuario</label>
-      <input id="usuario" type="text" pInputText class="line-input" placeholder="Ingresa tu usuario">
+      <label for="email">Correo electrónico</label>
+      <input
+        id="email"
+        type="email"
+        pInputText
+        class="line-input"
+        placeholder="Ingresa tu correo"
+        [(ngModel)]="email"
+        name="email"
+        required
+      />
     </div>
 
     <!-- Contraseña -->
     <div class="p-field">
       <label for="password">Contraseña</label>
-      <input id="password" type="password" pInputText class="line-input" placeholder="Ingresa tu contraseña">
+      <input
+        id="password"
+        type="password"
+        pInputText
+        class="line-input"
+        placeholder="Ingresa tu contraseña"
+        [(ngModel)]="password"
+        name="password"
+        required
+      />
     </div>
 
-    <!-- Olvidaste contraseña -->
-    <div class="forgot-password">
-      <a href="#">¿Has olvidado la contraseña?</a>
-    </div>
-
-    <!-- Botones -->
     <div class="buttons">
-      <button class="btn-login">Ingresar</button>
-      <button class="btn-register"(click)="goTo('/Registro')">Registrarse</button>
-      <button class="btn-google">
-        <img src="/src/assets/icons/google.svg" alt="Google" class="google-icon">
-        Continuar con Google
-      </button>
+      <button type="submit" class="btn-login">Ingresar</button>
+      <button type="button" class="btn-register" (click)="goTo('/Registro')">Registrarse</button>
     </div>
-  </div>
+  </form>
 </div>
