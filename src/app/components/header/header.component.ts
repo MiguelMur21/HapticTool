@@ -46,4 +46,7 @@ export class HeaderComponent {
   isAdminView(): boolean {
     return this.router.url.startsWith('/administrador');
   }
+  isActive(route: string): boolean {
+    return this.router.url === route;
+  }
 }

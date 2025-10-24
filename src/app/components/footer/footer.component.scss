@@ -1,0 +1,220 @@
+.footer-container {
+  background-color:   #505454  ;
+  color: #fff;
+  font-family: "Roboto", sans-serif;
+  padding: 2.5rem 3rem;
+}
+
+/* ===========================
+   SECCIÓN SUPERIOR
+=========================== */
+.footer-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 2rem;
+  border-bottom: 1px solid #777;
+  padding-bottom: 2rem;
+}
+
+/* ===== IZQUIERDA ===== */
+.footer-left {
+  flex: 1 1 40%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+
+  .footer-logo {
+    width: 250px;
+    height: auto;
+  }
+
+  p {
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+
+  a {
+    color: #ff7f00;
+    text-decoration: none;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .footer-socials {
+    margin-top: 0.8rem;
+
+    p {
+      font-weight: bold;
+      margin-bottom: 0.3rem;
+    }
+
+    .icons {
+      display: flex;
+      gap: 0.7rem;
+
+      i {
+        font-size: 1.4rem;
+        color: #000000;
+        transition: color 0.3s ease;
+        cursor: pointer;
+
+        &:hover {
+          color: #ff7f00;
+        }
+      }
+    }
+  }
+}
+
+/* ===== DERECHA ===== */
+.footer-right {
+  flex: 1 1 55%;
+}
+
+.locations-cert {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+/* Ubicaciones */
+.footer-locations {
+  flex: 1.5;
+  display: grid;
+  grid-template-areas:
+    "av68 cert"
+    "bogota cert"
+    "villavicencio cert";
+  gap: 1rem;
+
+  h4 {
+    color: #ff7f00;
+    margin-bottom: 0.3rem;
+  }
+
+  p {
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+
+  .campus-av68 {
+    grid-area: av68;
+  }
+
+  .bogota {
+    grid-area: bogota;
+  }
+
+  .villavicencio {
+    grid-area: villavicencio;
+    hr {
+      border: 0;
+      border-top: 1px solid #777;
+      margin: 0.4rem 0;
+    }
+  }
+}
+
+/* Certificaciones */
+.footer-certificates {
+  grid-area: cert;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+
+  h4 {
+    color: #ff7f00;
+    margin-bottom: 0.5rem;
+    margin-left: -10px; /* 🔹 un poco más a la izquierda */
+  }
+
+  .cert-images {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+
+    img {
+      width: 125px;
+      height: auto;
+      object-fit: contain;
+      transition: transform 0.3s ease;
+      &:hover {
+        transform: scale(1.05);
+      }
+    }
+  }
+}
+
+/* ===========================
+   SECCIÓN INFERIOR
+=========================== */
+.footer-bottom {
+  margin-top: 1.5rem;
+  text-align: center;
+
+  .footer-links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.2rem;
+
+    a {
+      color: #fff;
+      font-size: 0.9rem;
+      text-decoration: none;
+      transition: color 0.3s;
+      &:hover {
+        color: #ff7f00;
+      }
+    }
+
+    .btn-trabaja {
+      background-color: #ff7f00;
+      color: white !important;
+      padding: 0.4rem 1rem;
+      border-radius: 20px;
+      font-weight: bold;
+    }
+  }
+}
+
+/* ===========================
+   RESPONSIVE
+=========================== */
+@media (max-width: 992px) {
+  .footer-top {
+    flex-direction: column;
+  }
+
+  .locations-cert {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .footer-certificates {
+    align-items: flex-start;
+  }
+
+  .footer-logo {
+    width: 180px;
+  }
+}
+.aviso-btn {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 0.9rem;
+  cursor: pointer;
+  text-decoration: none;
+  transition: color 0.3s;
+
+  &:hover {
+    color: #ff7f00;
+  }
+}

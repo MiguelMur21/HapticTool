@@ -11,7 +11,6 @@ import { authGuard } from './guards/auth.guard';
 import { AdminUsersComponent } from './pages/superadmin/admin-users/admin-users.component';
 import { AdminArchiveComponent } from './pages/superadmin/admin-archive/admin-archive.component';
 import { AdminLogComponent } from './pages/superadmin/admin-log/admin-log.component';
-
 export const routes: Routes = [
  // 🌐 Página pública
   { path: '', component: AboutUsComponent },
