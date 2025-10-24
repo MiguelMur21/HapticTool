@@ -39,6 +39,12 @@ export class LoginComponent {
       }
     });
   }
+  
+  loginWithGoogle() {
+  console.log("Iniciar sesión con Google...");
+  // Aquí luego podrías implementar la autenticación real con Google si lo deseas
+  }
+
 
   goTo(path: string) {
     this.router.navigate([path]);

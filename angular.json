@@ -29,9 +29,16 @@
               {
                 "glob": "**/*",
                 "input": "public"
+              },
+              {
+                "glob": "**/*",
+                "input": "src/assets",
+                "output": "assets"
               }
             ],
             "styles": [
+              "primeicons/primeicons.css",
+
               "src/styles.scss"
             ],
             "scripts": [],

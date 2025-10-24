@@ -1,12 +1,17 @@
 <header class="header">
-  <div class="logo">🔧 HapticTool</div>
+  <div class="logo-container">
+    <img class="logo-u" src="assets/images/main-logo.svg" alt="Logo HapticTool" />
+    <div class="divider"></div>
+    <div class="logo">🔧 HapticTool</div>
+  </div>
+
 
   <!-- 🌐 Header normal -->
   <ng-container *ngIf="!isAdminView(); else adminHeader">
     <nav class="nav">
-      <p-button label="Acerca de" (onClick)="goTo('/')"></p-button>
-      <p-button label="Gráficas" (onClick)="goTo('/graficas')"></p-button>
-      <p-button label="Cargar Archivos" (onClick)="goTo('/cargar-archivos')"></p-button>
+      <p-button label="Sobre Nosotros" (onClick)="goTo('/')"  [ngClass]="{ 'active': isActive('/') }"></p-button>
+      <p-button label="Gráficas" (onClick)="goTo('/graficas')"    [ngClass]="{ 'active': isActive('/graficas') }"></p-button>
+      <p-button label="Cargar Archivos" (onClick)="goTo('/cargar-archivos')"    [ngClass]="{ 'active': isActive('/cargar-archivos') }"></p-button>
     </nav>
 
     <div class="actions">
@@ -19,17 +24,17 @@
           class="icon-btn" 
           (click)="goTo('/administrador')" 
           title="Administrar usuarios y archivos">
-          <i class="fa-solid fa-user-shield"></i>
+          <i class="pi pi-id-card"></i>
         </button>
 
         <!-- ⚙️ Ajustes -->
         <button class="icon-btn" (click)="goTo('/ajustes')" title="Ajustes y privacidad">
-          <i class="fa fa-gear"></i>
+          <i class="pi pi-cog"></i>
         </button>
 
         <!-- 🚪 Cerrar sesión -->
         <button class="icon-btn" (click)="logout()" title="Cerrar sesión">
-          <i class="fa fa-right-from-bracket"></i>
+          <i class="pi pi-sign-out"></i>
         </button>
       </ng-container>
 
@@ -55,10 +60,10 @@
     <div class="actions">
       <span class="welcome">Bienvenido: {{ user?.nombre }}</span>
         <button class="icon-btn" (click)="goTo('/ajustes')" title="Ajustes y privacidad">
-          <i class="fa fa-gear"></i>
+          <i class="pi pi-cog"></i>
         </button>
       <button class="icon-btn" (click)="logout()" title="Cerrar sesión">
-        <i class="fa fa-right-from-bracket"></i>
+          <i class="pi pi-sign-out"></i>
       </button>
     </div>
   </ng-template>

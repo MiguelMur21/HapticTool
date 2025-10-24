@@ -4,8 +4,10 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { User } from '../models/user'; 
+import { of } from 'rxjs';
+import { catchError } from 'rxjs/operators'; // 👈 Y aquí "catchError"
 
-export const TOKEN_KEY = 'access_token';
+export const TOKEN_KEY = 'token';
 export const USER_KEY = 'current_user';
 
 @Injectable({
@@ -97,14 +99,16 @@ export class ApiService {
     return userData ? JSON.parse(userData) : null;
   }
 
-  private getAuthHeaders(): HttpHeaders {
-    const token = isPlatformBrowser(this.platformId)
-      ? localStorage.getItem(TOKEN_KEY)
-      : null;
-    return new HttpHeaders({
-      'Authorization': token ? `Bearer ${token}` : ''
-    });
-  }
+    private getAuthHeaders(): HttpHeaders {
+      const token = isPlatformBrowser(this.platformId)
+        ? localStorage.getItem(TOKEN_KEY)
+        : null;
+
+      return new HttpHeaders({
+        'Authorization': token ? `Bearer ${token}` : ''
+      });
+    }
+
   getFiles() {
     return this.http.get<any[]>(`${this.apiUrl}/archivos/`);
   }
@@ -119,13 +123,13 @@ export class ApiService {
   }
 
   getSessionLogs(): Observable<any> {
-    const token = localStorage.getItem('access_token');
+    const token = localStorage.getItem(TOKEN_KEY);
     const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
+      Authorization: `Bearer ${token}`
     });
-
     return this.http.get(`${this.apiUrl}/admin/session-logs/`, { headers });
   }
+
     // =============================
   // 👥 GESTIÓN DE USUARIOS (ADMIN)
   // =============================
@@ -162,7 +166,64 @@ export class ApiService {
   }
 
   crearAdministrador(adminData: any): Observable<any> {
-  return this.http.post(`${this.apiUrl}/create_admin`, adminData);
+    const token = localStorage.getItem('token'); // o TOKEN_KEY si ya lo defines así
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+
+    return this.http.post(`${this.apiUrl}/create_admin`, adminData, { headers });
   }
 
+    // =============================
+  // 🎥 OBTENER DATOS 3D (CSV o C3D)
+  // =============================
+getData3D(nombreArchivo: string): Observable<any> {
+  if (!isPlatformBrowser(this.platformId)) {
+    console.warn('⚠️ getData3D ejecutado fuera del navegador');
+    return of(null);
+  }
+
+  const token = localStorage.getItem(TOKEN_KEY);
+  if (!token) {
+    console.error('❌ No hay token disponible');
+    return of(null);
+  }
+
+  const headers = new HttpHeaders({
+    Authorization: `Bearer ${token}`,
+  });
+
+  return this.http.get<any>(
+    `${this.apiUrl}/data/3d?nombre_archivo=${encodeURIComponent(nombreArchivo)}`,
+    { headers }
+  );
+}
+
+// =============================
+// 📄 LISTA DE ARCHIVOS
+// =============================
+getArchivos(): Observable<string[]> {
+  if (!isPlatformBrowser(this.platformId)) {
+    console.warn('⚠️ getArchivos ejecutado fuera del navegador');
+    return of([]);
+  }
+
+  const token = localStorage.getItem(TOKEN_KEY);
+  if (!token) {
+    console.error('❌ No hay token disponible');
+    return of([]);
+  }
+
+  const headers = new HttpHeaders({
+    Authorization: `Bearer ${token}`,
+  });
+
+  return this.http.get<string[]>(`${this.apiUrl}/lista_archivos/`, { headers }).pipe(
+    tap(() => console.log('✅ Archivos obtenidos correctamente')),
+    catchError(err => {
+      console.error('🚨 Error al obtener lista de archivos:', err);
+      return of([]);
+    })
+  );
+}
 }

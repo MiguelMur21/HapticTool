@@ -1,49 +1,170 @@
 .header {
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  padding: 0.8rem 1.5rem;
-  background: #878f96;
-  color: #fff;
+  align-items: center;
+  padding: 15px 40px;
+  background-color: var(--background); /* Fondo blanco principal */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 
-  .logo {
-    font-size: 1.2rem;
-    font-weight: bold;
-  }
-
-  .nav {
+  // Logo + texto
+  .logo-container {
     display: flex;
-    gap: 1rem;
+    align-items: center;
+    gap: 12px;
 
-    ::ng-deep .p-button {
-      border: none;
-      color: white;
-      background: transparent;
+    .logo-u {
+      width: 150px;
+      height: auto;
     }
 
-    ::ng-deep .p-button:hover {
-      background: rgba(255, 255, 255, 0.15);
+    .divider {
+      width: 2px;
+      height: 30px;
+      background-color: var(--secondary); /* Línea gris oscuro */
+    }
+
+    .logo {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: var(--text); /* Texto gris-negro para buena lectura */
+      letter-spacing: 0.5px;
+      white-space: nowrap;
     }
   }
 
+  // Navegación principal
+  .nav {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+
+  // 🔹 Estilo base de los botones
+  ::ng-deep .p-button {
+    background: transparent !important;
+    color: var(--text) !important;
+    border: none !important;
+    font-weight: 500;
+    position: relative;
+    transition: color 0.3s ease;
+
+    &:hover {
+      color: var(--primary) !important;
+    }
+
+    // 🔹 Línea inferior animada
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0%;
+      height: 3px;
+      background-color: var(--primary);
+      transition: width 0.3s ease;
+      border-radius: 4px;
+    }
+
+    &:hover::after {
+      width: 100%;
+    }
+  }
+
+  // 🔸 Estado activo (página actual)
+  ::ng-deep .p-button.active {
+    color: var(--primary) !important;
+    font-weight: 600;
+
+    &::after {
+      width: 100%;
+      background-color: var(--primary);
+    }
+  }
+}
+
+  // Botones de acción (sesión, ajustes, logout, etc.)
   .actions {
     display: flex;
     align-items: center;
-    gap: 0.8rem;
+    gap: 10px;
 
     .welcome {
-      font-weight: 500;
+      margin-right: 10px;
+      font-size: 0.95rem;
+      color: var(--text);
+      white-space: nowrap;
     }
 
-    ::ng-deep .p-button-rounded {
-      background: transparent;
+    .icon-btn {
+      background: none;
       border: none;
-      color: white;
-      font-size: 1.1rem;
+      cursor: pointer;
+      font-size: 1.3rem;
+      color: var(--secondary);
+      transition: color 0.3s;
+
+      &:hover {
+        color: var(--primary); /* Naranja al pasar el cursor */
+      }
+    }
+  }
+
+  // 🔹 Header responsive
+  @media (max-width: 1024px) {
+    padding: 10px 25px;
+
+    .logo-container {
+      .logo {
+        font-size: 1.2rem;
+      }
+      .logo-u {
+        width: 120px;
+      }
     }
 
-    ::ng-deep .p-button-rounded:hover {
-      background: rgba(255, 255, 255, 0.15);
+    .nav {
+      gap: 10px;
+
+      p-button {
+        font-size: 0.85rem;
+      }
+    }
+  }
+
+  // 🔸 Para pantallas pequeñas (celulares)
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 12px;
+
+    .logo-container {
+      justify-content: center;
+      margin-bottom: 8px;
+
+      .divider {
+        height: 20px;
+      }
+    }
+
+    .nav {
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .actions {
+      flex-wrap: wrap;
+      justify-content: center;
+
+      .welcome {
+        display: block;
+        width: 100%;
+        text-align: center;
+        margin-bottom: 5px;
+      }
     }
   }
 }

@@ -1,4 +1,22 @@
-<div class="chart-container">
-  <h2>📊 Gráfica de Nodos</h2>
-  <p-chart type="bar" [data]="basicData" [options]="basicOptions"></p-chart>
+<div class="graphics-container">
+  <h2 class="title">Visualizador de Datos 3D</h2>
+  <p class="subtitle">Selecciona un archivo de datos para visualizar los puntos 3D</p>
+
+  <div class="form-section">
+    <label for="archivo">Archivo:</label>
+    <select id="archivo" [(ngModel)]="nombreArchivo">
+      <option value="">Selecciona un archivo...</option>
+      <option *ngFor="let archivo of archivos" [value]="archivo">{{ archivo }}</option>
+    </select>
+  </div>
+
+  <div class="button-group">
+    <button pButton type="button" label="Generar grafica" icon="pi pi-upload" class="p-button-info" (click)="cargarArchivo()"></button>
+    <button pButton type="button" label="Play" icon="pi pi-play" class="p-button-success" (click)="playAnimation()"></button>
+    <button pButton type="button" label="Stop" icon="pi pi-stop" class="p-button-danger" (click)="stopAnimation()"></button>
+  </div>
+
+
+  <!-- 📈 Gráfico 3D -->
+  <div id="plot3d" style="width: 100%; height: 600px; margin-top: 20px;"></div>
 </div>
