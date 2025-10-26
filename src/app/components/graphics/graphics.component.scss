@@ -1,25 +1,270 @@
-
-
+// graphics.component.scss
 .graphics-container {
   text-align: center;
   background-color: #f8f9fa;
   border-radius: 12px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   margin: 2rem auto;
-  max-width: 900px;
+  max-width: 1400px;
+  padding: 2rem;
+  min-height: 600px;
 }
 
-.title {
-  color: #1b263b;
-  font-weight: 700;
-  margin-bottom: 0.5rem;
+// 🆕 LAYOUT DINÁMICO: GRÁFICA SE EXPANDE CUANDO NO HAY MÉTRICAS
+.graphics-layout {
+  display: flex;
+  gap: 2rem;
+  margin-top: 2rem;
+  align-items: flex-start;
+  position: relative;
+  
+  .graph-section {
+    flex: 3;
+    min-width: 0;
+    background: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s ease;
+    
+    // 🆕 CUANDO NO HAY ANIMACIÓN, LA GRÁFICA OCUPA TODO EL ESPACIO
+    &.full-width {
+      flex: 1;
+      min-width: 100%;
+    }
+  }
+  
+  .metrics-panel {
+    flex: 2;
+    min-width: 350px;
+    background: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    max-height: 600px;
+    overflow-y: auto;
+    animation: fadeIn 0.5s ease-in;
+    
+    h3 {
+      color: #1b263b;
+      margin-bottom: 0.5rem;
+      border-bottom: 2px solid #e9ecef;
+      padding-bottom: 0.5rem;
+    }
+    
+    .metrics-subtitle {
+      font-size: 0.8rem;
+      color: #6c757d;
+      margin-bottom: 1.5rem;
+      font-style: italic;
+    }
+  }
 }
 
-.subtitle {
-  color: #555;
-  margin-bottom: 2rem;
+// 🆕 MENSAJE CUANDO NO HAY ANIMACIÓN
+.no-animation-message {
+  flex: 2;
+  min-width: 350px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border: 2px dashed #dee2e6;
+  border-radius: 8px;
+  padding: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: pulse 2s infinite;
+  
+  .message-content {
+    text-align: center;
+    color: #6c757d;
+    
+    .message-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      opacity: 0.7;
+    }
+    
+    h4 {
+      color: #495057;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+    
+    p {
+      margin: 0;
+      font-size: 0.9rem;
+      max-width: 300px;
+      line-height: 1.4;
+    }
+  }
 }
 
+// 🎯 GRÁFICO CON TAMAÑO FIJO
+.plotly-graph-fixed {
+  width: 100%;
+  height: 500px;
+  border-radius: 6px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  flex-shrink: 0;
+}
+
+// CONTROLES DE ANIMACIÓN
+.animation-controls {
+  background: white;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  
+  .controls-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    
+    button {
+      min-width: 50px;
+    }
+  }
+}
+
+// BARRA DE PROGRESO
+.progress-section {
+  .frame-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    color: #666;
+    font-weight: 500;
+  }
+  
+  .progress-bar-container {
+    position: relative;
+    
+    .progress-slider {
+      width: 100%;
+      height: 6px;
+      border-radius: 3px;
+      background: #e9ecef;
+      outline: none;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+      
+      &:hover {
+        opacity: 1;
+      }
+      
+      &::-webkit-slider-thumb {
+        appearance: none;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: #007bff;
+        cursor: pointer;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      }
+    }
+    
+    .progress-labels {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 0.25rem;
+      font-size: 0.8rem;
+      color: #888;
+    }
+  }
+}
+
+// TARJETAS DE MÉTRICAS
+.metrics-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.metric-card {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 1rem;
+  border-left: 4px solid #007bff;
+  
+  &.general { border-left-color: #17a2b8; }
+  &.displacement { border-left-color: #28a745; }
+  &.velocity { border-left-color: #ffc107; }
+  &.ranges { border-left-color: #dc3545; }
+  &.stability { border-left-color: #6f42c1; }
+  
+  h4 {
+    margin: 0 0 1rem 0;
+    font-size: 0.9rem;
+    color: #495057;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .metric-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    padding: 0.25rem 0;
+    
+    label {
+      font-size: 0.8rem;
+      color: #6c757d;
+      font-weight: 500;
+      flex: 1;
+      text-align: left;
+    }
+    
+    span {
+      font-size: 0.85rem;
+      color: #495057;
+      font-weight: 600;
+      background: white;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      min-width: 80px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+    
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+// 🆕 ANIMACIONES
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    border-color: #dee2e6;
+  }
+  50% {
+    border-color: #adb5bd;
+  }
+  100% {
+    border-color: #dee2e6;
+  }
+}
+
+// Estilos existentes que se mantienen
 .form-section {
   margin-bottom: 1.5rem;
   font-size: 1rem;
@@ -37,10 +282,38 @@
   display: flex;
   justify-content: center;
   gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.title {
+  color: #1b263b;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.subtitle {
+  color: #555;
   margin-bottom: 2rem;
 }
 
-.plot-container {
-  width: 100%;
-  height: 600px;
+.empty-state {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  background: white;
+  border-radius: 8px;
+  margin-top: 2rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  
+  .empty-content {
+    text-align: center;
+    color: #6c757d;
+    
+    .empty-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      opacity: 0.5;
+    }
+  }
 }
