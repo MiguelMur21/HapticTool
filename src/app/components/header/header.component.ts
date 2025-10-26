@@ -49,4 +49,16 @@ export class HeaderComponent {
   isActive(route: string): boolean {
     return this.router.url === route;
   }
+
+  // Saber si el usuario es "normal" (rol 1)
+isUserNormal(): boolean {
+  return this.user?.rol?.rol_id === 1 || 
+         this.user?.rol?.nombre?.toLowerCase() === 'usuario';
+}
+
+// Saber si el usuario es "investigador" (rol 2)
+isResearcher(): boolean {
+  return this.user?.rol?.rol_id === 2 || 
+         this.user?.rol?.nombre?.toLowerCase() === 'investigador';
+}
 }

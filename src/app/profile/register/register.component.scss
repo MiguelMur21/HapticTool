@@ -1,15 +1,33 @@
 .register-container {
   display: flex;
   height: 100vh;
-  background: #f4f6f8;
+  background: #f8f9fa;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .register-image {
   flex: 1;
-  background: #eaeaea;
+  background: #e9ecef;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 2rem;
+  
+  .image-placeholder {
+    width: 100%;
+    height: 100%;
+    background: #dee2e6;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #6c757d;
+    font-size: 1.1rem;
+    
+    &::before {
+      content: "Imagen de registro";
+    }
+  }
 }
 
 .register-form {
@@ -18,54 +36,164 @@
   flex-direction: column;
   justify-content: center;
   padding: 3rem;
-  background: #fff;
-  box-shadow: -4px 0 12px rgba(0, 0, 0, 0.05);
+  background: #ffffff;
+  max-width: 500px;
 }
 
 .title {
   font-size: 2rem;
-  text-align: left;
+  color: #333;
   margin-bottom: 2rem;
+  text-align: center;
+  font-weight: 600;
 }
 
-.p-field {
+.form-group {
   margin-bottom: 1.5rem;
-  display: flex;
-  flex-direction: column;
-}
-
-.line-input {
-  border: none;
-  border-bottom: 2px solid #ccc;
-  border-radius: 0;
-  padding: 0.5rem 0;
-  outline: none;
-  transition: border-color 0.3s;
-
-  &:focus {
-    border-bottom: 2px solid #007ad9; // azul del botón
+  
+  label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #555;
+    font-weight: 500;
   }
 }
 
-.buttons {
-  display: flex;
-  justify-content: center;
-  margin-top: 2rem;
+.form-input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid #e9ecef;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: border-color 0.3s;
+  box-sizing: border-box;
+  
+  &:focus {
+    outline: none;
+    border-color: #1f5c25;
+  }
+  
+  &::placeholder {
+    color: #6c757d;
+  }
 }
 
-/* Botón Registrarse */
-.btn-register {
-  width: 70%;
-  padding: 1rem;
-  font-size: 1.2rem;
-  background-color: #1f5c25; // azul elegante
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background 0.3s;
+.alert {
+  padding: 0.75rem;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  
+  &.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+  }
+  
+  &.alert-error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+  }
+}
 
-  &:hover {
-    background-color: #005ea6;
+.form-actions {
+  margin: 2rem 0;
+}
+
+.btn-register {
+  width: 100%;
+  padding: 0.875rem;
+  background-color: #1f5c25;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  
+  &:hover:not(:disabled) {
+    background-color: #16451c;
+  }
+  
+  &:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+}
+
+.spinner {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid transparent;
+  border-top: 2px solid white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-right: 0.5rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.login-link {
+  text-align: center;
+  color: #6c757d;
+  font-size: 0.95rem;
+  
+  .link {
+    color: #1f5c25;
+    text-decoration: none;
+    cursor: pointer;
+    font-weight: 500;
+    
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .register-container {
+    flex-direction: column;
+    height: auto;
+    min-height: 100vh;
+  }
+  
+  .register-image {
+    flex: none;
+    height: 200px;
+    
+    .image-placeholder::before {
+      content: "Imagen";
+    }
+  }
+  
+  .register-form {
+    flex: none;
+    padding: 2rem 1.5rem;
+  }
+  
+  .title {
+    font-size: 1.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .register-form {
+    padding: 1.5rem 1rem;
+  }
+  
+  .title {
+    font-size: 1.5rem;
+  }
+  
+  .form-input {
+    padding: 0.65rem;
   }
 }

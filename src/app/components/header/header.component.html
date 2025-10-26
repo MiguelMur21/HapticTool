@@ -5,25 +5,34 @@
     <div class="logo">🔧 HapticTool</div>
   </div>
 
-
   <!-- 🌐 Header normal -->
   <ng-container *ngIf="!isAdminView(); else adminHeader">
     <nav class="nav">
-      <p-button label="Sobre Nosotros" (onClick)="goTo('/')"  [ngClass]="{ 'active': isActive('/') }"></p-button>
+      <!-- Todos los roles (incluido el no logueado) pueden ver Sobre Nosotros -->
+      <p-button label="Sobre Nosotros" (onClick)="goTo('/')" [ngClass]="{ 'active': isActive('/') }"></p-button>
       <p-button label="Gráficas" (onClick)="goTo('/graficas')"    [ngClass]="{ 'active': isActive('/graficas') }"></p-button>
-      <p-button label="Cargar Archivos" (onClick)="goTo('/cargar-archivos')"    [ngClass]="{ 'active': isActive('/cargar-archivos') }"></p-button>
+
+      <!-- 🔹 Gráficas solo para usuarios logueados -->
+
+      <!-- 🔹 Cargar archivos solo para investigador (2) o superadmin (3) -->
+      <p-button 
+        *ngIf="isResearcher() || isSuperAdmin()"
+        label="Cargar Archivos" 
+        (onClick)="goTo('/cargar-archivos')"  
+        [ngClass]="{ 'active': isActive('/cargar-archivos') }">
+      </p-button>
     </nav>
 
     <div class="actions">
       <ng-container *ngIf="user; else guest">
         <span class="welcome">Bienvenido, {{ user.nombre }}</span>
 
-        <!-- 🔹 Solo para SuperAdministrador -->
+        <!-- 👑 Solo para SuperAdministrador -->
         <button 
           *ngIf="isSuperAdmin()" 
           class="icon-btn" 
           (click)="goTo('/administrador')" 
-          title="Administrar usuarios y archivos">
+          title="Panel de administración">
           <i class="pi pi-id-card"></i>
         </button>
 
@@ -59,11 +68,11 @@
 
     <div class="actions">
       <span class="welcome">Bienvenido: {{ user?.nombre }}</span>
-        <button class="icon-btn" (click)="goTo('/ajustes')" title="Ajustes y privacidad">
-          <i class="pi pi-cog"></i>
-        </button>
+      <button class="icon-btn" (click)="goTo('/ajustes')" title="Ajustes y privacidad">
+        <i class="pi pi-cog"></i>
+      </button>
       <button class="icon-btn" (click)="logout()" title="Cerrar sesión">
-          <i class="pi pi-sign-out"></i>
+        <i class="pi pi-sign-out"></i>
       </button>
     </div>
   </ng-template>

@@ -11,12 +11,162 @@
   </div>
 
   <div class="button-group">
-    <button pButton type="button" label="Generar grafica" icon="pi pi-upload" class="p-button-info" (click)="cargarArchivo()"></button>
-    <button pButton type="button" label="Play" icon="pi pi-play" class="p-button-success" (click)="playAnimation()"></button>
-    <button pButton type="button" label="Stop" icon="pi pi-stop" class="p-button-danger" (click)="stopAnimation()"></button>
+    <button pButton type="button" label="Generar grafica" icon="pi pi-upload" 
+            class="p-button-info" (click)="cargarArchivo()"></button>
   </div>
 
+  <!-- CONTROLES DE ANIMACIÓN - SIEMPRE VISIBLES CUANDO HAY DATOS -->
+  <div class="animation-controls" *ngIf="frames.length > 0">
+    <div class="controls-row">
+      <button pButton type="button" icon="pi pi-step-backward" 
+              class="p-button-secondary" (click)="previousFrame()"
+              [disabled]="currentFrameIndex === 0"></button>
+      
+      <button pButton type="button" [icon]="isAnimating ? 'pi pi-pause' : 'pi pi-play'" 
+              [class]="isAnimating ? 'p-button-warning' : 'p-button-success'" 
+              (click)="toggleAnimation()"></button>
+      
+      <button pButton type="button" icon="pi pi-step-forward" 
+              class="p-button-secondary" (click)="nextFrame()"
+              [disabled]="currentFrameIndex === frames.length - 1"></button>
+      
+      <button pButton type="button" label="Reset" icon="pi pi-refresh" 
+              class="p-button-help" (click)="resetAnimation()"></button>
+    </div>
 
-  <!-- 📈 Gráfico 3D -->
-  <div id="plot3d" style="width: 100%; height: 600px; margin-top: 20px;"></div>
+    <!-- BARRA DE PROGRESO -->
+    <div class="progress-section">
+      <div class="frame-info">
+        <span>Frame: {{ currentFrameIndex + 1 }} / {{ frames.length }}</span>
+        <span>Tiempo: {{ getCurrentTime() }}</span>
+      </div>
+      
+      <div class="progress-bar-container">
+        <input type="range" 
+               min="0" 
+               [max]="frames.length - 1" 
+               [value]="currentFrameIndex"
+               (input)="onFrameSeek($event)"
+               class="progress-slider">
+        <div class="progress-labels">
+          <span>0s</span>
+          <span>{{ getTotalTime() }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 🆕 LAYOUT: GRÁFICA SIEMPRE VISIBLE, MÉTRICAS SOLO EN PLAY -->
+  <div class="graphics-layout" *ngIf="frames.length > 0">
+    <!-- 📈 GRÁFICO 3D - SIEMPRE VISIBLE -->
+    <div class="graph-section" [class.full-width]="!isAnimating">
+      <div id="plot3d" class="plotly-graph-fixed"></div>
+    </div>
+
+    <!-- 📊 PANEL DE MÉTRICAS - SOLO VISIBLE DURANTE ANIMACIÓN -->
+    <div class="metrics-panel" *ngIf="isAnimating">
+      <h3>📊 Métricas en Tiempo Real</h3>
+      <p class="metrics-subtitle">Métricas activas durante reproducción</p>
+      
+      <div class="metrics-grid">
+        <!-- INFORMACIÓN GENERAL -->
+        <div class="metric-card general">
+          <h4>📈 Información General</h4>
+          <div class="metric-item">
+            <label>Frames Totales:</label>
+            <span>{{ frames.length }}</span>
+          </div>
+          <div class="metric-item">
+            <label>Duración:</label>
+            <span>{{ getTotalTime() }}</span>
+          </div>
+          <div class="metric-item">
+            <label>Puntos Activos:</label>
+            <span>{{ getActivePoints() }}</span>
+          </div>
+          <div class="metric-item">
+            <label>Frame Actual:</label>
+            <span>{{ currentFrameIndex + 1 }}</span>
+          </div>
+        </div>
+
+        <!-- DESPLAZAMIENTO ACTUAL -->
+        <div class="metric-card displacement">
+          <h4>🎯 Desplazamiento Actual</h4>
+          <div class="metric-item">
+            <label>Total:</label>
+            <span>{{ getCurrentDisplacement() }} u</span>
+          </div>
+          <div class="metric-item">
+            <label>En X:</label>
+            <span>{{ getAxisDisplacement('x') }} u</span>
+          </div>
+          <div class="metric-item">
+            <label>En Y:</label>
+            <span>{{ getAxisDisplacement('y') }} u</span>
+          </div>
+          <div class="metric-item">
+            <label>En Z:</label>
+            <span>{{ getAxisDisplacement('z') }} u</span>
+          </div>
+        </div>
+
+        <!-- VELOCIDAD Y MOVIMIENTO -->
+        <div class="metric-card velocity">
+          <h4>⚡ Velocidad</h4>
+          <div class="metric-item">
+            <label>Promedio:</label>
+            <span>{{ getAverageSpeed() }} u/s</span>
+          </div>
+          <div class="metric-item">
+            <label>Máxima:</label>
+            <span>{{ getMaxSpeed() }} u/s</span>
+          </div>
+          <div class="metric-item">
+            <label>Punto Más Activo:</label>
+            <span>{{ getMostActivePoint() }}</span>
+          </div>
+        </div>
+
+        <!-- RANGOS DE MOVIMIENTO -->
+        <div class="metric-card ranges">
+          <h4>📏 Rango de Movimiento</h4>
+          <div class="metric-item">
+            <label>Amplitud X:</label>
+            <span>{{ getMovementRange('x') }} u</span>
+          </div>
+          <div class="metric-item">
+            <label>Amplitud Y:</label>
+            <span>{{ getMovementRange('y') }} u</span>
+          </div>
+          <div class="metric-item">
+            <label>Amplitud Z:</label>
+            <span>{{ getMovementRange('z') }} u</span>
+          </div>
+          <div class="metric-item">
+            <label>Área Cubierta:</label>
+            <span>{{ getCoveredArea() }} u²</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 🆕 MENSAJE CUANDO NO ESTÁ EN PLAY -->
+    <div class="no-animation-message" *ngIf="!isAnimating">
+      <div class="message-content">
+        <div class="message-icon">⏯️</div>
+        <h4>Presiona PLAY para ver métricas en tiempo real</h4>
+        <p>Las métricas de desplazamiento, velocidad y análisis de movimiento se activarán durante la reproducción</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ESTADO VACÍO -->
+  <div class="empty-state" *ngIf="frames.length === 0">
+    <div class="empty-content">
+      <div class="empty-icon">📊</div>
+      <h3>Sin datos cargados</h3>
+      <p>Selecciona un archivo y haz clic en "Generar gráfica" para visualizar los datos</p>
+    </div>
+  </div>
 </div>

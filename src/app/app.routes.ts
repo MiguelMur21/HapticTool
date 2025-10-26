@@ -11,20 +11,33 @@ import { authGuard } from './guards/auth.guard';
 import { AdminUsersComponent } from './pages/superadmin/admin-users/admin-users.component';
 import { AdminArchiveComponent } from './pages/superadmin/admin-archive/admin-archive.component';
 import { AdminLogComponent } from './pages/superadmin/admin-log/admin-log.component';
+
 export const routes: Routes = [
- // 🌐 Página pública
+  // 🌐 Páginas públicas
   { path: '', component: AboutUsComponent },
   { path: 'graficas', component: GraphicsComponent },
   { path: 'cargar-archivos', component: UploadFilesComponent },
   { path: 'Inicio-sesión', component: LoginComponent },
   { path: 'Registro', component: RegisterComponent },
 
-  // 👤 Usuarios normales y administradores
-  { path: 'usuario', component: NormalUserComponent },
-  { path: 'admin', component: AdminComponent },
-
-  // 👑 Superadministrador con subrutas
+  // 👤 Usuario normal (rol_id = 1)
   {
+    path: 'usuario',
+    component: NormalUserComponent,
+    canActivate: [authGuard],
+    data: { roles: ['usuario'] }
+  },
+
+  // 🧩 Administrador (rol_id = 2)
+  {
+    path: 'admin',
+    component: AdminComponent,
+    canActivate: [authGuard],
+    data: { roles: ['administrador'] }
+  },
+
+  // 👑 Superadministrador (rol_id = 3)
+{
     path: 'administrador',
     component: SuperadminComponent,
     canActivate: [authGuard],
