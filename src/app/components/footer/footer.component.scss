@@ -218,3 +218,176 @@
     color: #ff7f00;
   }
 }
+
+// ===========================
+//   ESTILOS ESPECÍFICOS PARA p-dialog
+// ===========================
+
+// Fondo blanco forzado para el diálogo
+::ng-deep .p-dialog {
+  background: white !important;
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  
+  .p-dialog-header {
+    background: #f8f9fa !important;
+    color: #2c3e50 !important;
+    border-bottom: 1px solid #dee2e6;
+    padding: 1.2rem;
+    
+    .p-dialog-title {
+      font-weight: 600;
+      font-size: 1.3rem;
+      color: #2c3e50;
+    }
+    
+    .p-dialog-header-close {
+      color: #6c757d;
+      
+      &:hover {
+        color: #495057;
+        background-color: #e9ecef;
+      }
+    }
+  }
+  
+  .p-dialog-content {
+    background: white !important;
+    color: #000000 !important;
+    padding: 0;
+    
+    // Eliminar cualquier posible transparencia
+    background-color: white !important;
+    background-image: none !important;
+  }
+  
+  .p-dialog-footer {
+    background: #f8f9fa !important;
+    border-top: 1px solid #dee2e6;
+    padding: 1rem 1.2rem;
+  }
+}
+
+// Contenido del aviso de privacidad
+.aviso-content {
+  max-height: 60vh;
+  overflow-y: auto;
+  padding: 1.5rem;
+  background: white;
+  color: #000000;
+  
+  p {
+    color: #000000;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+  
+  h4 {
+    color: #2c3e50;
+    margin-top: 1.5rem;
+    margin-bottom: 0.8rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+  
+  ul {
+    margin-left: 1.5rem;
+    margin-bottom: 1.5rem;
+    
+    li {
+      color: #000000;
+      margin-bottom: 0.5rem;
+      line-height: 1.5;
+    }
+  }
+  
+  a {
+    color: #ff7f00;
+    text-decoration: none;
+    
+    &:hover {
+      text-decoration: underline;
+      color: #0056b3;
+    }
+  }
+  
+  strong {
+    color: #2c3e50;
+  }
+}
+
+// Enlace de aviso en el footer
+.aviso-link {
+  cursor: pointer;
+  color: #fff;
+  text-decoration: none;
+  transition: color 0.3s;
+  
+  &:hover {
+    color: #ff7f00;
+    text-decoration: underline;
+  }
+}
+
+// ===========================
+//   RESPONSIVE PARA EL DIÁLOGO
+// ===========================
+@media (max-width: 960px) {
+  ::ng-deep .p-dialog {
+    width: 75vw !important;
+    
+    .aviso-content {
+      padding: 1rem;
+    }
+  }
+}
+
+@media (max-width: 640px) {
+  ::ng-deep .p-dialog {
+    width: 95vw !important;
+    margin: 0.5rem;
+    
+    .p-dialog-header {
+      padding: 1rem;
+      
+      .p-dialog-title {
+        font-size: 1.1rem;
+      }
+    }
+    
+    .aviso-content {
+      max-height: 50vh;
+      padding: 0.8rem;
+      
+      h4 {
+        font-size: 1rem;
+      }
+      
+      ul {
+        margin-left: 1rem;
+      }
+    }
+    
+    .p-dialog-footer {
+      padding: 0.8rem 1rem;
+    }
+  }
+}
+
+// ===========================
+//   ANIMACIÓN DE APERTURA
+// ===========================
+::ng-deep .p-dialog {
+  animation: dialogEnter 0.3s ease-out;
+}
+
+@keyframes dialogEnter {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}

@@ -1,79 +1,237 @@
 .admin-upload-container {
   text-align: center;
   margin: 40px auto;
-  max-width: 900px;
+  max-width: 1200px;
   font-family: 'Segoe UI', sans-serif;
+  padding: 0 20px;
 }
 
 h2 {
-  margin-bottom: 20px;
+  margin-bottom: 30px;
   color: #333;
+  font-size: 2rem;
+  font-weight: 600;
 }
 
 .upload-area {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 15px;
+  gap: 15px;
+  margin-bottom: 25px;
+  flex-wrap: wrap;
 }
 
 .select-btn {
   background-color: #007bff;
   color: white;
   border: none;
-  padding: 12px 18px;
-  border-radius: 6px;
+  padding: 12px 24px;
+  border-radius: 8px;
   cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+  }
 }
 
 .upload-btn {
   background-color: #28a745;
   color: white;
   border: none;
-  padding: 12px 18px;
-  border-radius: 6px;
+  padding: 12px 24px;
+  border-radius: 8px;
   cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  
+  &:hover:not(:disabled) {
+    background-color: #218838;
+    transform: translateY(-2px);
+  }
+  
+  &:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+    transform: none;
+  }
 }
 
 .cancel-btn {
   background-color: #dc3545;
   color: white;
   border: none;
-  padding: 12px 18px;
-  border-radius: 6px;
+  padding: 12px 24px;
+  border-radius: 8px;
   cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    background-color: #c82333;
+    transform: translateY(-2px);
+  }
 }
 
-.success-message {
-  color: green;
-  margin-bottom: 10px;
+/* ====== TABLA PRIMENG ====== */
+.table-container {
+  margin-top: 30px;
+  
+  ::ng-deep .p-datatable {
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  ::ng-deep .p-datatable-thead > tr > th {
+    background-color: #f8f9fa;
+    color: #495057;
+    font-weight: 600;
+    padding: 1rem;
+    border: none;
+  }
+  
+  ::ng-deep .p-datatable-tbody > tr > td {
+    padding: 1rem;
+    border: none;
+    vertical-align: middle;
+  }
+  
+  ::ng-deep .p-datatable-tbody > tr:nth-child(even) {
+    background-color: #f8f9fa;
+  }
+  
+  ::ng-deep .p-datatable-tbody > tr:hover {
+    background-color: #e9ecef;
+    transition: background-color 0.3s ease;
+  }
 }
 
-.error-message {
-  color: red;
-  margin-bottom: 10px;
+/* ====== BADGES DE TIPO DE ARCHIVO ====== */
+.file-type-badge {
+  padding: 0.4rem 1rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  
+  &.csv {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+  }
+  
+  &.c3d {
+    background: #cce7ff;
+    color: #004085;
+    border: 1px solid #b3d7ff;
+  }
 }
 
-.files-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
+/* ====== BOTONES DE ACCIÓN ====== */
+.acciones {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  
+  .p-button {
+    min-width: 40px;
+    height: 40px;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
 }
 
-.files-table th,
-.files-table td {
-  border: 1px solid #ddd;
-  padding: 8px;
-  text-align: center;
+/* ====== DIÁLOGO ====== */
+::ng-deep .p-dialog {
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+
+  .p-dialog-header {
+    background-color: #ff9800;
+    color: white;
+    font-weight: 600;
+    font-size: 1.2rem;
+    border-radius: 12px 12px 0 0;
+    padding: 1.2rem 1.5rem;
+  }
+
+  .p-dialog-content {
+    padding: 1.5rem;
+    background: #ffffff;
+    border-radius: 0 0 12px 12px;
+  }
 }
 
-.files-table th {
-  background-color: #f5f5f5;
-  font-weight: bold;
+.dialog-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.8rem;
+  margin-top: 1.5rem;
 }
 
+/* ====== TOAST ====== */
+::ng-deep .p-toast {
+  top: 80px;
+  right: 20px;
+}
+
+/* ====== MENSAJE SIN ARCHIVOS ====== */
 .no-files-text {
-  color: #666;
-  margin-top: 15px;
+  color: #6c757d;
+  margin-top: 40px;
+  font-size: 1.1rem;
+  font-style: italic;
+}
+
+/* ====== RESPONSIVE ====== */
+@media (max-width: 768px) {
+  .admin-upload-container {
+    margin: 20px auto;
+    padding: 0 15px;
+  }
+  
+  h2 {
+    font-size: 1.5rem;
+  }
+  
+  .upload-area {
+    flex-direction: column;
+    gap: 10px;
+    
+    button {
+      width: 100%;
+      max-width: 300px;
+    }
+  }
+  
+  .table-container {
+    overflow-x: auto;
+    
+    ::ng-deep .p-datatable {
+      font-size: 0.9rem;
+    }
+  }
+  
+  .acciones {
+    flex-direction: column;
+    align-items: center;
+    
+    .p-button {
+      width: 100%;
+      max-width: 120px;
+    }
+  }
+  
+  ::ng-deep .p-dialog {
+    width: 95% !important;
+    margin: 1rem;
+  }
 }
