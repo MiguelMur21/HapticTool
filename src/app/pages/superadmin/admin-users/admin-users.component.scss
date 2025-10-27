@@ -167,20 +167,27 @@
 /* ====== DIÁLOGO ====== */
 ::ng-deep .p-dialog {
   border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 
   .p-dialog-header {
     background-color: #ff9800;
     color: white;
     font-weight: 600;
     font-size: 1.2rem;
+    border-radius: 12px 12px 0 0;
+    padding: 1.2rem 1.5rem;
   }
 
   .p-dialog-content {
     padding: 1.5rem;
+    background: #ffffff !important; /* Fondo sólido blanco */
+    border-radius: 0 0 12px 12px;
   }
 
   .p-dialog-footer {
     text-align: right;
+    background: #ffffff;
+    border-radius: 0 0 12px 12px;
   }
 }
 
@@ -198,6 +205,7 @@
     border-radius: 8px;
     border: 1px solid #ccc;
     width: 100%;
+    background: #ffffff;
 
     &:focus {
       border-color: #ff9800;
@@ -232,6 +240,163 @@
       background-color: white !important;
       color: #757575 !important;
       transform: scale(1.03);
+    }
+  }
+}
+
+/* ====== ESTILOS PARA p-toast ====== */
+::ng-deep .p-toast {
+  top: 80px;
+  right: 20px;
+
+  .p-toast-message {
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    margin-bottom: 1rem;
+    background: #ffffff !important; /* Fondo sólido blanco */
+    border: none;
+
+    .p-toast-message-content {
+      padding: 1rem;
+      border: none;
+      background: transparent;
+
+      .p-toast-message-icon {
+        font-size: 1.2rem;
+      }
+
+      .p-toast-message-text {
+        margin-left: 0.75rem;
+
+        .p-toast-summary {
+          font-weight: 600;
+          font-size: 1rem;
+        }
+
+        .p-toast-detail {
+          margin-top: 0.25rem;
+          color: #4a5568;
+        }
+      }
+
+      .p-toast-icon-close {
+        background: transparent;
+        border: none;
+        border-radius: 50%;
+        width: 1.5rem;
+        height: 1.5rem;
+        
+        &:hover {
+          background: rgba(0, 0, 0, 0.1);
+        }
+      }
+    }
+  }
+
+  // Toast de éxito
+  .p-toast-message-success {
+    border-left: 4px solid #22c55e;
+    
+    .p-toast-message-icon {
+      color: #22c55e;
+    }
+    
+    .p-toast-summary {
+      color: #166534;
+    }
+  }
+
+  // Toast de error
+  .p-toast-message-error {
+    border-left: 4px solid #ef4444;
+    
+    .p-toast-message-icon {
+      color: #ef4444;
+    }
+    
+    .p-toast-summary {
+      color: #dc2626;
+    }
+  }
+
+  // Toast de advertencia
+  .p-toast-message-warn {
+    border-left: 4px solid #f59e0b;
+    
+    .p-toast-message-icon {
+      color: #f59e0b;
+    }
+    
+    .p-toast-summary {
+      color: #d97706;
+    }
+  }
+
+  // Toast de información
+  .p-toast-message-info {
+    border-left: 4px solid #3b82f6;
+    
+    .p-toast-message-icon {
+      color: #3b82f6;
+    }
+    
+    .p-toast-summary {
+      color: #1d4ed8;
+    }
+  }
+}
+
+/* ====== RESPONSIVE ====== */
+@media (max-width: 768px) {
+  .create-user-section {
+    .create-user-form {
+      .form-row {
+        flex-direction: column;
+        align-items: stretch;
+        
+        input {
+          width: 100%;
+        }
+      }
+    }
+  }
+
+  .table-container {
+    padding: 0 0.5rem;
+    
+    ::ng-deep .p-datatable {
+      font-size: 0.9rem;
+    }
+  }
+
+  .acciones {
+    flex-direction: column;
+    gap: 0.5rem;
+    
+    .p-button {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+
+  ::ng-deep .p-dialog {
+    width: 95% !important;
+    margin: 1rem;
+    
+    .p-dialog-content {
+      padding: 1rem;
+    }
+  }
+
+  ::ng-deep .p-toast {
+    top: 60px;
+    right: 10px;
+    left: 10px;
+    
+    .p-toast-message {
+      .p-toast-message-content {
+        padding: 0.75rem;
+      }
     }
   }
 }

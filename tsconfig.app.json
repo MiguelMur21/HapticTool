@@ -4,20 +4,13 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "./out-tsc/app",
-    "types": [
-      "node"
-    ]
+    "types": ["jasmine"]
   },
   "files": [
-    "src/main.ts",
-    "src/main.server.ts",
-    "src/server.ts"
+    "src/main.ts"
   ],
   "include": [
-    "src/**/*.d.ts"
-  ],
-  "typeRoots": [
-  "node_modules/@types",
-  "src/types"
+    "src/**/*.d.ts",
+    "src/**/*.ts"
   ]
 }

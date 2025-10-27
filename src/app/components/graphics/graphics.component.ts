@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, PLATFORM_ID, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Inject, PLATFORM_ID, AfterViewInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { ChartModule } from 'primeng/chart';
 import { ApiService } from '../../services/api.service';
@@ -13,7 +13,11 @@ import { ButtonModule } from 'primeng/button';
   templateUrl: './graphics.component.html',
   styleUrls: ['./graphics.component.scss']
 })
-export class GraphicsComponent implements OnInit, AfterViewInit {
+export class GraphicsComponent implements OnInit, AfterViewInit, OnDestroy {
+  
+  // 🎯 [CORRECCIÓN 1] - AGREGAR ViewChild PARA MANEJAR EL ELEMENTO DEL DOM
+  @ViewChild('plot3d', { static: false }) plot3dElement!: ElementRef;
+  
   archivos: string[] = [];
   nombreArchivo: string = '';
   fileType: string = '';
@@ -30,7 +34,10 @@ export class GraphicsComponent implements OnInit, AfterViewInit {
   constructor(
     private apiService: ApiService,
     @Inject(PLATFORM_ID) private platformId: Object
-  ) {}
+  ) {
+    // 🎯 [SOLUCIÓN SIMPLIFICADA] - APLICAR PATCH SEGURO
+    this.applyCanvasPerformancePatch();
+  }
 
   ngOnInit() {
     this.apiService.getArchivos().subscribe({
@@ -49,94 +56,187 @@ export class GraphicsComponent implements OnInit, AfterViewInit {
 
     const module = await import('plotly.js-dist-min');
     this.Plotly = module.default;
+    
+    console.log('✅ Plotly cargado exitosamente');
+  }
+
+  ngOnDestroy() {
+    this.stopAnimation();
+    console.log('🧹 Componente graphics destruido - recursos liberados');
+  }
+
+  // 🎯 [SOLUCIÓN TYPESCRIPT CORREGIDA] - PATCH COMPATIBLE CON TIPADO
+  private applyCanvasPerformancePatch() {
+    if (!isPlatformBrowser(this.platformId)) return;
+    
+    if ((HTMLCanvasElement as any).__willReadFrequentlyPatched) {
+      return;
+    }
+
+    console.log('🎯 Aplicando optimización willReadFrequently al Canvas...');
+
+    // 💾 Guardar el método original con tipo any para evitar problemas de TypeScript
+    const originalGetContext = HTMLCanvasElement.prototype.getContext as any;
+
+    // 🔄 [SOLUCIÓN DEFINITIVA] - USAR any PARA EVITAR CONFLICTOS DE TIPADO
+    HTMLCanvasElement.prototype.getContext = function(
+      contextId: string, 
+      options?: any
+    ): any {
+      
+      // 🎯 APLICAR OPTIMIZACIÓN SOLO PARA CONTEXTOS 2D
+      if (contextId === '2d') {
+        const contextOptions = {
+          ...options,
+          willReadFrequently: true // 🚀 FORZAR OPTIMIZACIÓN
+        };
+        
+        console.log('✅ Canvas 2D optimizado con willReadFrequently=true');
+        return originalGetContext.call(this, contextId, contextOptions);
+      }
+
+      // 📞 Para otros contextos, usar el método original sin cambios
+      return originalGetContext.call(this, contextId, options);
+    };
+
+    (HTMLCanvasElement as any).__willReadFrequentlyPatched = true;
+    console.log('🎉 Patch de performance aplicado exitosamente');
   }
 
   cargarArchivo() {
-    if (!this.nombreArchivo) {
-      alert('Selecciona un archivo primero');
-      return;
-    }
-
-    if (!this.Plotly) {
-      console.warn('Plotly aún no está cargado');
-      return;
-    }
-
-    this.apiService.getData3D(this.nombreArchivo).subscribe({
-      next: (data) => {
-        this.frames = data.frames;
-        this.fileType = data.file_type;
-        this.initialFrame = [...this.frames[0]]; // 🆕 Guardar frame inicial
-
-        if (this.frames.length > 0) {
-          console.log(`✅ ${this.frames.length} frames cargados, primer frame con ${this.frames[0].length} puntos`);
-          this.mostrarFrame(this.Plotly, 0);
-        } else {
-          this.Plotly.newPlot('plot3d', [], {});
-          console.warn('Archivo sin datos de cinemática');
-        }
-      },
-      error: (err) => {
-        console.error('Error al cargar datos:', err);
-      }
-    });
+  if (!this.nombreArchivo) {
+    alert('Selecciona un archivo primero');
+    return;
   }
 
-  mostrarFrame(Plotly: any, frameIndex: number) {
-    const frame = this.frames[frameIndex];
-    if (!frame) return;
-
-    // Extraemos coordenadas X, Y, Z
-    const x = frame.map((p: any) => p.x);
-    const y = frame.map((p: any) => p.y);
-    const z = frame.map((p: any) => p.z);
-
-    // 📍 Trazado solo con marcadores (sin líneas)
-    const trace = {
-      x,
-      y,
-      z,
-      mode: 'markers',
-      type: 'scatter3d',
-      marker: {
-        size: 5,
-        color: z,
-        colorscale: 'Viridis',
-        opacity: 0.8
-      }
-    };
-
-    // 🎨 Configuración del gráfico
-    const layout = {
-      title: `Frame ${frameIndex + 1} / ${this.frames.length}`,
-      scene: {
-        xaxis: { title: 'X' },
-        yaxis: { title: 'Y' },
-        zaxis: { title: 'Z' }
-      },
-      margin: { l: 0, r: 0, b: 0, t: 40 },
-      showlegend: false
-    };
-
-    // 📈 Renderiza el gráfico 3D
-    Plotly.newPlot('plot3d', [trace], layout, { responsive: true });
+  if (!this.Plotly) {
+    console.warn('Plotly aún no está cargado');
+    return;
   }
 
-  // 🆕 MÉTODOS DE CONTROL DE ANIMACIÓN MEJORADOS
+  console.log(`📁 Cargando archivo: ${this.nombreArchivo}`);
+
+  this.apiService.getData3D(this.nombreArchivo).subscribe({
+    next: (data) => {
+      this.frames = data.frames;
+      this.fileType = data.file_type;
+      this.initialFrame = [...this.frames[0]];
+
+      if (this.frames.length > 0) {
+        console.log(`✅ ${this.frames.length} frames cargados, primer frame con ${this.frames[0].length} puntos`);
+        
+        // 🎯 [CORRECCIÓN] - USAR ngAfterViewChecked O ESPERAR A QUE EL DOM ESTÉ LISTO
+        setTimeout(() => {
+          this.mostrarFrame(0);
+        }, 100); // 🎯 Aumentar delay para asegurar que el DOM esté listo
+      } else {
+        console.warn('⚠️ Archivo sin datos de cinemática');
+      }
+    },
+    error: (err) => {
+      console.error('❌ Error al cargar datos:', err);
+    }
+  });
+}
+  // 🎯 MÉTODO mostrarFrame CON MÁS DIAGNÓSTICO
+// 🎯 MÉTODO mostrarFrame COMPLETAMENTE SILENCIOSO
+mostrarFrame(frameIndex: number) {
+  // 🚨 VERIFICACIÓN SILENCIOSA
+  if (!this.Plotly || !this.plot3dElement?.nativeElement) {
+    return;
+  }
+
+  const frame = this.frames[frameIndex];
+  if (!frame) return;
+
+  // 📊 Extraer coordenadas SIN LOGS
+  const x = frame.map((p: any) => p.x);
+  const y = frame.map((p: any) => p.y);
+  const z = frame.map((p: any) => p.z);
+
+  // 📍 Trazado optimizado
+  const trace = {
+    x, y, z,
+    mode: 'markers',
+    type: 'scatter3d',
+    marker: {
+      size: 4,
+      color: z,
+      colorscale: 'Viridis',
+      opacity: 0.8,
+      symbol: 'circle'
+    }
+  };
+
+  // 🎨 Layout
+  const layout = {
+    title: `Frame ${frameIndex + 1} / ${this.frames.length}`,
+    scene: {
+      xaxis: { title: 'X' },
+      yaxis: { title: 'Y' },
+      zaxis: { title: 'Z' }
+    },
+    margin: { l: 0, r: 0, b: 0, t: 40 },
+    showlegend: false
+  };
+
+  // ⚡ Configuración
+  const config = {
+    responsive: true,
+    displayModeBar: false
+  };
+
+  // 🎯 RENDERIZADO SILENCIOSO
+  try {
+    this.Plotly.purge(this.plot3dElement.nativeElement);
+    
+    // 🎯 PROMESA SILENCIOSA - SIN .then() CON LOGS
+    this.Plotly.newPlot(
+      this.plot3dElement.nativeElement, 
+      [trace], 
+      layout, 
+      config
+    );
+            
+  } catch (error) {
+    console.error('❌ Error al renderizar gráfico:', error);
+  }
+}
+
+  // 🆕 MÉTODOS DE CONTROL DE ANIMACIÓN OPTIMIZADOS
   playAnimation() {
     if (this.isAnimating || !this.frames.length) return;
+    
     this.isAnimating = true;
-    console.log('▶️ Iniciando animación');
+    console.log('▶️ Iniciando animación optimizada');
 
-    this.animationInterval = setInterval(() => {
-      this.currentFrameIndex = (this.currentFrameIndex + 1) % this.frames.length;
-      this.mostrarFrame(this.Plotly, this.currentFrameIndex);
-    }, 100);
+    // 🎯 requestAnimationFrame PARA MÁXIMA FLUIDEZ
+    let lastFrameTime = 0;
+    const targetFrameTime = 1000 / 24; // 🎯 24 FPS para mejor performance
+
+    const animate = (currentTime: number) => {
+      if (!this.isAnimating) return;
+
+      if (currentTime - lastFrameTime >= targetFrameTime) {
+        this.currentFrameIndex = (this.currentFrameIndex + 1) % this.frames.length;
+        this.mostrarFrame(this.currentFrameIndex);
+        lastFrameTime = currentTime;
+      }
+
+      if (this.isAnimating) {
+        this.animationInterval = requestAnimationFrame(animate);
+      }
+    };
+
+    this.animationInterval = requestAnimationFrame(animate);
   }
 
   stopAnimation() {
     this.isAnimating = false;
-    clearInterval(this.animationInterval);
+    if (this.animationInterval) {
+      cancelAnimationFrame(this.animationInterval);
+      this.animationInterval = null;
+    }
     console.log('⏹️ Animación detenida');
   }
 
@@ -151,28 +251,28 @@ export class GraphicsComponent implements OnInit, AfterViewInit {
   previousFrame() {
     if (this.currentFrameIndex > 0) {
       this.currentFrameIndex--;
-      this.mostrarFrame(this.Plotly, this.currentFrameIndex);
+      this.mostrarFrame(this.currentFrameIndex);
     }
   }
 
   nextFrame() {
     if (this.currentFrameIndex < this.frames.length - 1) {
       this.currentFrameIndex++;
-      this.mostrarFrame(this.Plotly, this.currentFrameIndex);
+      this.mostrarFrame(this.currentFrameIndex);
     }
   }
 
   resetAnimation() {
     this.currentFrameIndex = 0;
     this.stopAnimation();
-    this.mostrarFrame(this.Plotly, 0);
+    this.mostrarFrame(0);
   }
 
   onFrameSeek(event: any) {
     const newFrameIndex = parseInt(event.target.value);
     if (newFrameIndex >= 0 && newFrameIndex < this.frames.length) {
       this.currentFrameIndex = newFrameIndex;
-      this.mostrarFrame(this.Plotly, this.currentFrameIndex);
+      this.mostrarFrame(this.currentFrameIndex);
     }
   }
 
@@ -187,7 +287,7 @@ export class GraphicsComponent implements OnInit, AfterViewInit {
     return `${totalSeconds}s`;
   }
 
-  // 🆕 MÉTODOS DE MÉTRICAS Y DESPLAZAMIENTO
+  // 🆕 MÉTODOS DE MÉTRICAS Y DESPLAZAMIENTO (se mantienen igual)
   getActivePoints(): number {
     return this.frames[0]?.length || 0;
   }
@@ -273,7 +373,6 @@ export class GraphicsComponent implements OnInit, AfterViewInit {
     const yRange = parseFloat(this.getMovementRange('y'));
     const zRange = parseFloat(this.getMovementRange('z'));
     
-    // Volumen aproximado del espacio cubierto
     return (xRange * yRange * zRange).toFixed(2);
   }
 
@@ -281,7 +380,7 @@ export class GraphicsComponent implements OnInit, AfterViewInit {
     if (!this.frames.length || this.frames.length < 2) return '0.00';
     
     const totalMovement = this.calculateTotalDistance();
-    const maxPossibleMovement = this.frames.length * 2; // Estimación conservadora
+    const maxPossibleMovement = this.frames.length * 2;
     
     return ((totalMovement / maxPossibleMovement) * 100).toFixed(1);
   }
@@ -306,7 +405,7 @@ export class GraphicsComponent implements OnInit, AfterViewInit {
     return 'Baja';
   }
 
-  // 🆕 MÉTODOS DE CÁLCULO INTERNOS
+  // 🆕 MÉTODOS DE CÁLCULO INTERNOS (se mantienen igual)
   private calculateTotalDistance(): number {
     let totalDistance = 0;
     

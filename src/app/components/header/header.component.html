@@ -1,4 +1,5 @@
-<header class="header">
+<!-- 🔽 AGREGAR *ngIf="showHeader" -->
+<header class="header" *ngIf="showHeader">
   <div class="logo-container">
     <img class="logo-u" src="assets/images/main-logo.svg" alt="Logo HapticTool" />
     <div class="divider"></div>
@@ -10,9 +11,14 @@
     <nav class="nav">
       <!-- Todos los roles (incluido el no logueado) pueden ver Sobre Nosotros -->
       <p-button label="Sobre Nosotros" (onClick)="goTo('/')" [ngClass]="{ 'active': isActive('/') }"></p-button>
-      <p-button label="Gráficas" (onClick)="goTo('/graficas')"    [ngClass]="{ 'active': isActive('/graficas') }"></p-button>
-
+      
       <!-- 🔹 Gráficas solo para usuarios logueados -->
+      <p-button 
+        *ngIf="user"
+        label="Gráficas" 
+        (onClick)="goTo('/graficas')"    
+        [ngClass]="{ 'active': isActive('/graficas') }">
+      </p-button>
 
       <!-- 🔹 Cargar archivos solo para investigador (2) o superadmin (3) -->
       <p-button 
@@ -37,9 +43,6 @@
         </button>
 
         <!-- ⚙️ Ajustes -->
-        <button class="icon-btn" (click)="goTo('/ajustes')" title="Ajustes y privacidad">
-          <i class="pi pi-cog"></i>
-        </button>
 
         <!-- 🚪 Cerrar sesión -->
         <button class="icon-btn" (click)="logout()" title="Cerrar sesión">
@@ -68,9 +71,9 @@
 
     <div class="actions">
       <span class="welcome">Bienvenido: {{ user?.nombre }}</span>
-      <button class="icon-btn" (click)="goTo('/ajustes')" title="Ajustes y privacidad">
-        <i class="pi pi-cog"></i>
-      </button>
+        <button class="icon-btn" (click)="goTo('')" title="volver a inicio">
+          <i class="pi pi-chevron-circle-left"></i>
+        </button>
       <button class="icon-btn" (click)="logout()" title="Cerrar sesión">
         <i class="pi pi-sign-out"></i>
       </button>

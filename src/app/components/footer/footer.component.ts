@@ -10,10 +10,10 @@ import { ButtonModule } from 'primeng/button';
   styleUrl: './footer.component.scss'
 })
 export class FooterComponent {
-  visibleAviso = false;
+ visibleAviso = false;
 
   mostrarAviso() {
-    console.log('Abriendo diálogo...');
+    console.log('✅ Abriendo diálogo de aviso de privacidad...');
     this.visibleAviso = true;
   }
 }

@@ -59,9 +59,11 @@
   <!-- 🆕 LAYOUT: GRÁFICA SIEMPRE VISIBLE, MÉTRICAS SOLO EN PLAY -->
   <div class="graphics-layout" *ngIf="frames.length > 0">
     <!-- 📈 GRÁFICO 3D - SIEMPRE VISIBLE -->
-    <div class="graph-section" [class.full-width]="!isAnimating">
-      <div id="plot3d" class="plotly-graph-fixed"></div>
-    </div>
+  <!-- 🎯 [CORRECCIÓN 8] - CAMBIAR id POR #plot3d PARA ViewChild -->
+<div class="graph-section" [class.full-width]="!isAnimating">
+  <!-- 🎯 [IMPORTANTE] - VERIFICAR QUE ESTE ELEMENTO EXISTA -->
+  <div #plot3d class="plotly-graph-fixed" style="width: 100%; height: 500px;"></div>
+</div>
 
     <!-- 📊 PANEL DE MÉTRICAS - SOLO VISIBLE DURANTE ANIMACIÓN -->
     <div class="metrics-panel" *ngIf="isAnimating">

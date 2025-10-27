@@ -1,53 +1,111 @@
 <div class="login-container">
-  <!-- Zona izquierda (imagen futura) -->
+  <!-- Zona izquierda (imagen) -->
   <div class="login-image">
-    <!-- Aquí luego pondrás una imagen -->
+    <img src="assets/images/inicio_sesion.jpg" alt="Inicio de sesión">
   </div>
 
   <!-- Zona derecha (formulario) -->
   <div class="login-form">
-  <h2 class="title">Iniciar Sesión</h2>
+    <h2 class="title">Iniciar Sesión</h2>
 
-  <form (ngSubmit)="login()" #loginForm="ngForm">
-    <!-- Correo -->
-    <div class="p-field">
-      <label for="email">Correo electrónico</label>
-      <input
-        id="email"
-        type="email"
-        pInputText
-        class="line-input"
-        placeholder="Ingresa tu correo"
-        [(ngModel)]="email"
-        name="email"
-        required
-      />
-    </div>
+    <form (ngSubmit)="login()" #loginForm="ngForm" (keypress)="onKeyPress($event)">
+      <!-- Correo -->
+      <div class="p-field">
+        <label for="email">Correo electrónico</label>
+        <input
+          id="email"
+          type="email"
+          pInputText
+          class="line-input"
+          placeholder="Ingresa tu correo"
+          [(ngModel)]="email"
+          name="email"
+          required
+          [disabled]="isLoading"
+          (input)="onEmailChange()"
+        />
+      </div>
 
-    <!-- Contraseña -->
-    <div class="p-field">
-      <label for="password">Contraseña</label>
-      <input
-        id="password"
-        type="password"
-        pInputText
-        class="line-input"
-        placeholder="Ingresa tu contraseña"
-        [(ngModel)]="password"
-        name="password"
-        required
-      />
-    </div>
+      <!-- Contraseña -->
+      <div class="p-field">
+        <label for="password">Contraseña</label>
+        <input
+          id="password"
+          type="password"
+          pInputText
+          class="line-input"
+          placeholder="Ingresa tu contraseña"
+          [(ngModel)]="password"
+          name="password"
+          required
+          [disabled]="isLoading"
+          (input)="onPasswordChange()"
+        />
+      </div>
 
-    <div class="buttons">
-      <button type="submit" class="btn-login">Ingresar</button>
-      <button type="button" class="btn-register" (click)="goTo('/Registro')">Registrarse</button>
-          <!-- Botón Iniciar con Google -->
-      <button type="button" class="btn-google">
-        <img src="https://www.svgrepo.com/show/475656/google-color.svg"alt="Google" class="google-icon" />
-        Iniciar con Google
-      </button>
-    </div>
+      <!-- Mensaje de error -->
+      <div *ngIf="errorMessage" class="error-message">
+        <i class="pi pi-exclamation-triangle"></i>
+        {{ errorMessage }}
+      </div>
 
-  </form>
+      <div class="buttons">
+        <!-- Botón Login Tradicional -->
+        <button 
+          type="submit" 
+          class="btn-login"
+          [disabled]="isLoading || !email || !password"
+          [class.loading]="isLoading"
+        >
+          <span *ngIf="!isLoading">
+            <i class="pi pi-sign-in"></i>
+            Ingresar
+          </span>
+          <span *ngIf="isLoading">
+            <i class="pi pi-spinner pi-spin"></i>
+            Verificando...
+          </span>
+        </button>
+        
+        <!-- Botón Registrarse -->
+        <button 
+          type="button" 
+          class="btn-register" 
+          (click)="goTo('/Registro')"
+          [disabled]="isLoading || isGoogleLoading"
+        >
+          <i class="pi pi-user-plus"></i>
+          Registrarse
+        </button>
+        
+        <!-- Separador -->
+        <div class="separator">
+          <span>o continúa con</span>
+        </div>
+        
+        <!-- ✅ BOTÓN GOOGLE ACTUALIZADO - Usa el renderizado oficial -->
+        <div #googleButton class="google-btn-container"></div>
+        
+        <!-- ❌ ELIMINAR el botón manual de Google que tenías antes -->
+        <!--
+        <button 
+          type="button" 
+          class="btn-google" 
+          (click)="loginWithGoogle()"
+          [disabled]="isLoading || isGoogleLoading"
+          [class.loading]="isGoogleLoading"
+        >
+          <span *ngIf="!isGoogleLoading">
+            <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" class="google-icon" />
+            Iniciar con Google
+          </span>
+          <span *ngIf="isGoogleLoading">
+            <i class="pi pi-spinner pi-spin"></i>
+            Conectando con Google...
+          </span>
+        </button>
+        -->
+      </div>
+    </form>
+  </div>
 </div>

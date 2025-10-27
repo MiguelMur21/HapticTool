@@ -110,7 +110,7 @@ export class ApiService {
     }
 
   getFiles() {
-    return this.http.get<any[]>(`${this.apiUrl}/archivos/`);
+    return this.http.get<any[]>(`${this.apiUrl}/lista_archivos/`);
   }
 
 
@@ -222,6 +222,25 @@ getArchivos(): Observable<string[]> {
     tap(() => console.log('✅ Archivos obtenidos correctamente')),
     catchError(err => {
       console.error('🚨 Error al obtener lista de archivos:', err);
+      return of([]);
+    })
+  );
+}
+// =============================
+// 📂 LISTA DE ARCHIVOS COMPLETA (PARA ADMIN)
+// =============================
+getArchivosCompletos(): Observable<string[]> {
+  if (!isPlatformBrowser(this.platformId)) {
+    console.warn('⚠️ getArchivosCompletos ejecutado fuera del navegador');
+    return of([]);
+  }
+
+  const headers = this.getAuthHeaders();
+
+  return this.http.get<string[]>(`${this.apiUrl}/lista_archivos/`, { headers }).pipe(
+    tap((archivos) => console.log('✅ Archivos completos obtenidos:', archivos)),
+    catchError(err => {
+      console.error('🚨 Error al obtener archivos completos:', err);
       return of([]);
     })
   );

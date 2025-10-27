@@ -6,10 +6,40 @@
   <h3>Crear nuevo investigador</h3>
   <form (ngSubmit)="crearAdmin()" [formGroup]="nuevoAdminForm" class="create-user-form">
     <div class="form-row">
-      <input type="text" formControlName="nombre" placeholder="Nombre completo" required />
-      <input type="email" formControlName="email" placeholder="Correo electrónico" required />
-      <input type="password" formControlName="password" placeholder="Contraseña" required />
-      <button type="submit" [disabled]="nuevoAdminForm.invalid">Crear usuario</button>
+      <input 
+        type="text" 
+        formControlName="nombre" 
+        placeholder="Nombre completo" 
+        [class.error]="nuevoAdminForm.get('nombre')?.invalid && nuevoAdminForm.get('nombre')?.touched" />
+      
+      <input 
+        type="email" 
+        formControlName="email" 
+        placeholder="Correo electrónico" 
+        [class.error]="nuevoAdminForm.get('email')?.invalid && nuevoAdminForm.get('email')?.touched" />
+      
+      <input 
+        type="password" 
+        formControlName="password" 
+        placeholder="Contraseña (mín. 6 caracteres)" 
+        [class.error]="nuevoAdminForm.get('password')?.invalid && nuevoAdminForm.get('password')?.touched" />
+      
+      <button 
+        type="submit" 
+        [disabled]="nuevoAdminForm.invalid"
+        class="create-btn">
+        Crear usuario
+      </button>
+    </div>
+    
+    <!-- Mensajes de validación -->
+    <div class="validation-errors" *ngIf="nuevoAdminForm.invalid && nuevoAdminForm.touched">
+      <small *ngIf="nuevoAdminForm.get('nombre')?.errors?.['required']">El nombre es requerido</small>
+      <small *ngIf="nuevoAdminForm.get('nombre')?.errors?.['minlength']">Mínimo 2 caracteres</small>
+      <small *ngIf="nuevoAdminForm.get('email')?.errors?.['required']">El email es requerido</small>
+      <small *ngIf="nuevoAdminForm.get('email')?.errors?.['email']">Formato de email inválido</small>
+      <small *ngIf="nuevoAdminForm.get('password')?.errors?.['required']">La contraseña es requerida</small>
+      <small *ngIf="nuevoAdminForm.get('password')?.errors?.['minlength']">Mínimo 6 caracteres</small>
     </div>
   </form>
 </div>
@@ -24,7 +54,7 @@
     [loading]="loading"
     responsiveLayout="scroll">
 
-    <!-- ====== ENCABEZADO DE TABLA ====== -->
+    <!-- ENCABEZADO DE TABLA -->
     <ng-template pTemplate="header">
       <tr>
         <th>ID</th>
@@ -35,7 +65,7 @@
       </tr>
     </ng-template>
 
-    <!-- ====== CUERPO DE TABLA ====== -->
+    <!-- CUERPO DE TABLA -->
     <ng-template pTemplate="body" let-user>
       <tr>
         <td>{{ user.usuario_id }}</td>
@@ -51,7 +81,7 @@
             label=" Cambiar contraseña" 
             icon="pi pi-key" 
             class="p-button-info p-button-sm"
-            (click)="openPasswordDialog(user.usuario_id)">
+            (click)="openPasswordDialog(user)">
           </button>
 
           <button 
@@ -59,7 +89,8 @@
             label="Eliminar" 
             icon="pi pi-trash" 
             class="p-button-danger p-button-sm"
-            (click)="deleteUser(user.usuario_id)">
+            (click)="deleteUser(user.usuario_id)"
+            [disabled]="user.usuario_id === currentUserId">
           </button>
         </td>
       </tr>
@@ -70,40 +101,55 @@
   <p *ngIf="statusMessage" class="status">{{ statusMessage }}</p>
 </div>
 
-<!-- ====== DIÁLOGO PARA CAMBIAR CONTRASEÑA ====== -->
+<!-- DIÁLOGO PARA CAMBIAR CONTRASEÑA -->
 <p-dialog 
-  header="Cambiar Contraseña" 
+  [header]="'Cambiar Contraseña - ' + selectedUserName"
   [(visible)]="showPasswordDialog" 
   [modal]="true" 
   [closable]="true"
-  [style]="{ width: '400px' }">
+  [style]="{ width: '450px' }"
+  (onHide)="onPasswordDialogHide()">
 
   <div class="p-fluid">
-    <label for="newPassword" class="block mb-2">Nueva Contraseña</label>
-    <input 
-      type="password" 
-      id="newPassword" 
-      pInputText 
-      [(ngModel)]="newPassword" 
-      placeholder="Ingrese nueva contraseña"
-      class="w-full mb-3" />
+    <form [formGroup]="passwordForm">
+      <div class="field">
+        <label for="newPassword" class="block mb-2">Nueva Contraseña *</label>
+        <input 
+          type="password" 
+          id="newPassword" 
+          pInputText 
+          formControlName="newPassword"
+          placeholder="Mínimo 6 caracteres"
+          class="w-full mb-2" 
+          [class]="passwordForm.get('newPassword')?.invalid && passwordForm.get('newPassword')?.touched ? 'ng-invalid ng-dirty' : ''" />
+        
+        <small *ngIf="passwordForm.get('newPassword')?.invalid && passwordForm.get('newPassword')?.touched" 
+               class="error-text">
+          La contraseña debe tener al menos 6 caracteres
+        </small>
+      </div>
 
-    <div class="dialog-buttons">
-      <button 
-        pButton 
-        label="Actualizar" 
-        icon="pi pi-check" 
-        class="p-button-success" 
-        (click)="updatePassword()">
-      </button>
+      <div class="dialog-buttons">
+        <button 
+          pButton 
+          label="Actualizar" 
+          icon="pi pi-check" 
+          class="p-button-success" 
+          (click)="updatePassword()"
+          [disabled]="passwordForm.invalid">
+        </button>
 
-      <button 
-        pButton 
-        label="Cancelar" 
-        icon="pi pi-times" 
-        class="p-button-secondary" 
-        (click)="showPasswordDialog = false">
-      </button>
-    </div>
+        <button 
+          pButton 
+          label="Cancelar" 
+          icon="pi pi-times" 
+          class="p-button-secondary" 
+          (click)="showPasswordDialog = false">
+        </button>
+      </div>
+    </form>
   </div>
 </p-dialog>
+
+<!-- Componente toast para mensajes -->
+<p-toast></p-toast>

@@ -2,58 +2,124 @@
   <!-- 🔹 Título -->
   <h2>📁 Gestión de Archivos</h2>
 
-  <!-- 🔹 Área de carga de archivos (horizontal) -->
+  <!-- 🔹 Área de carga de archivos -->
   <div class="upload-area">
-    <input type="file" id="fileInput" (change)="onFileSelected($event)" hidden />
+    <input 
+      type="file" 
+      id="fileInput" 
+      (change)="onFileSelected($event)" 
+      hidden 
+      accept=".csv,.c3d" 
+    />
 
-    <!-- Botón principal azul para seleccionar -->
     <button class="select-btn" (click)="triggerFileInput()">
       {{ selectedFile ? selectedFile.name : 'Seleccionar archivo' }}
     </button>
 
-    <!-- Botón verde para subir -->
     <button class="upload-btn" [disabled]="!selectedFile" (click)="onUpload()">
       Subir Archivo
     </button>
 
-    <!-- Botón rojo para cancelar -->
     <button class="cancel-btn" *ngIf="selectedFile" (click)="onCancel()">
       Cancelar
     </button>
   </div>
 
-  <!-- 🔹 Mensaje debajo de la barra de carga -->
-  <div
-    *ngIf="message"
-    [ngClass]="{
-      'success-message': messageType === 'success',
-      'error-message': messageType === 'error'
-    }"
-  >
-    {{ message }}
+  <!-- 🔹 Tabla COMPLETA -->
+  <div class="table-container" *ngIf="files.length > 0; else noFiles">
+    <p-table 
+      [value]="files"
+      [paginator]="true" 
+      [rows]="10"
+      responsiveLayout="scroll"
+      styleClass="p-datatable-striped">
+
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Nombre del archivo</th>
+          <th>Tipo</th>
+          <th>Fecha de subida</th>
+          <th>Acciones</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-file>
+        <tr>
+          <td>{{ file.nombre }}</td>
+          <td>
+            <span class="file-type-badge" [class.csv]="file.tipo === 'csv'" [class.c3d]="file.tipo === 'c3d'">
+              {{ file.tipo?.toUpperCase() }}
+            </span>
+          </td>
+          <td>{{ file.fecha }}</td>
+          <td class="acciones">
+            <!-- Botón Actualizar -->
+            <button 
+              pButton 
+              icon="pi pi-refresh" 
+              class="p-button-warning p-button-sm"
+              (click)="openUpdateDialog(file)"
+              pTooltip="Actualizar archivo"
+              tooltipPosition="top">
+            </button>
+
+            <!-- Botón Eliminar -->
+            <button 
+              pButton 
+              icon="pi pi-trash" 
+              class="p-button-danger p-button-sm"
+              (click)="deleteFile(file.nombre)"
+              pTooltip="Eliminar archivo"
+              tooltipPosition="top">
+            </button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
   </div>
 
-  <!-- 🔹 Tabla de archivos -->
-  <table class="files-table" *ngIf="files.length > 0; else noFiles">
-    <thead>
-      <tr>
-        <th>Nombre del archivo</th>
-        <th>Subido por</th>
-        <th>Ruta</th>
-        <th>Fecha de subida</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let file of files">
-        <td>{{ file.nombre }}</td>
-        <td>{{ file.subidoPor }}</td>
-        <td>{{ file.ruta }}</td>
-        <td>{{ file.fecha }}</td>
-      </tr>
-    </tbody>
-  </table>
+  <!-- Diálogo para actualizar archivo -->
+  <p-dialog 
+    header="Actualizar Archivo" 
+    [(visible)]="showUpdateDialog" 
+    [modal]="true"
+    [style]="{ width: '500px' }"
+    (onHide)="onUpdateDialogHide()">
 
-  <!-- 🔸 Mensaje si no hay archivos -->
+    <div class="p-fluid">
+      <p>Actualizar archivo: <strong>{{ selectedFileName }}</strong></p>
+      
+      <input 
+        type="file" 
+        #updateFileInput
+        (change)="onUpdateFileSelected($event)"
+        accept=".csv,.c3d"
+        style="margin: 1rem 0;" />
+      
+      <div class="dialog-buttons">
+        <button 
+          pButton 
+          label="Actualizar" 
+          icon="pi pi-check" 
+          class="p-button-warning" 
+          (click)="onUpdateFile()"
+          [disabled]="!updateSelectedFile">
+        </button>
+        
+        <button 
+          pButton 
+          label="Cancelar" 
+          icon="pi pi-times" 
+          class="p-button-secondary" 
+          (click)="showUpdateDialog = false">
+        </button>
+      </div>
+    </div>
+  </p-dialog>
+
+  <!-- Componente toast para mensajes -->
+  <p-toast></p-toast>
+
   <ng-template #noFiles>
     <p class="no-files-text">No hay archivos cargados aún.</p>
   </ng-template>
