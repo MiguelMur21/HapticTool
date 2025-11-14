@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import 'jasmine';
 
 import { GraphicsComponent } from './graphics.component';
 

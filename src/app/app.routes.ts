@@ -15,37 +15,63 @@ import { AdminLogComponent } from './pages/superadmin/admin-log/admin-log.compon
 export const routes: Routes = [
   // 🌐 Páginas públicas
   { path: '', component: AboutUsComponent },
-  { path: 'graficas', component: GraphicsComponent },
-  { path: 'cargar-archivos', component: UploadFilesComponent },
   { path: 'Inicio-sesión', component: LoginComponent },
   { path: 'Registro', component: RegisterComponent },
 
-  // 👤 Usuario normal (rol_id = 1)
+  // 🔐 Páginas protegidas por autenticación (cualquier usuario logueado)
+  { 
+    path: 'graficas', 
+    component: GraphicsComponent,
+    canActivate: [authGuard] // Cualquier usuario autenticado
+  },
+
+  // 🔒 Páginas protegidas por ROL
+  { 
+    path: 'cargar-archivos', 
+    component: UploadFilesComponent,
+    canActivate: [authGuard],
+    data: { roles: ['admin', 'super_admin'] } // Solo admin y super_admin
+  },
+
+  // 👤 Ruta específica para usuario normal
   {
     path: 'usuario',
     component: NormalUserComponent,
     canActivate: [authGuard],
-    data: { roles: ['usuario'] }
+    data: { roles: ['usuario_normal'] }
   },
 
-  // 🧩 Administrador (rol_id = 2)
+  // 🧩 Ruta específica para administrador
   {
     path: 'admin',
     component: AdminComponent,
     canActivate: [authGuard],
-    data: { roles: ['administrador'] }
+    data: { roles: ['admin'] }
   },
 
-  // 👑 Superadministrador (rol_id = 3)
-{
+  // 👑 Panel de Superadministrador (SOLO super_admin)
+  {
     path: 'administrador',
     component: SuperadminComponent,
     canActivate: [authGuard],
+    data: { roles: ['super_admin'] },
     children: [
-      { path: '', redirectTo: 'usuarios', pathMatch: 'full' }, // ruta por defecto
-      { path: 'usuarios', component: AdminUsersComponent },
-      { path: 'archivos', component: AdminArchiveComponent },
-      { path: 'logs', component: AdminLogComponent }
+      { path: '', redirectTo: 'usuarios', pathMatch: 'full' },
+      { 
+        path: 'usuarios', 
+        component: AdminUsersComponent,
+        data: { roles: ['super_admin'] } // 🔥 IMPORTANTE: Proteger hijos también
+      },
+      { 
+        path: 'archivos', 
+        component: AdminArchiveComponent,
+        data: { roles: ['super_admin'] }
+      },
+      { 
+        path: 'logs', 
+        component: AdminLogComponent,
+        data: { roles: ['super_admin'] }
+      }
     ]
   },
 
