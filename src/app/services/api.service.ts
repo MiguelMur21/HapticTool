@@ -118,8 +118,18 @@ export class ApiService {
     return this.http.put(`${this.apiUrl}/archivo/${encodeURIComponent(nombre)}`, formData);
   }
 
+    // En tu api.service.ts
   eliminarArchivo(nombre: string) {
-    return this.http.delete(`${this.apiUrl}/archivo/${encodeURIComponent(nombre)}`);
+    const token = localStorage.getItem('token'); // O donde guardes el token
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.delete(
+      `${this.apiUrl}/archivo/${encodeURIComponent(nombre)}`,
+      { headers }
+    );
   }
 
   getSessionLogs(): Observable<any> {

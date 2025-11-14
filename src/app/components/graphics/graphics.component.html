@@ -55,7 +55,6 @@
       </div>
     </div>
   </div>
-
   <!-- 🆕 LAYOUT: GRÁFICA SIEMPRE VISIBLE, MÉTRICAS SOLO EN PLAY -->
   <div class="graphics-layout" *ngIf="frames.length > 0">
     <!-- 📈 GRÁFICO 3D - SIEMPRE VISIBLE -->
@@ -153,14 +152,7 @@
       </div>
     </div>
 
-    <!-- 🆕 MENSAJE CUANDO NO ESTÁ EN PLAY -->
-    <div class="no-animation-message" *ngIf="!isAnimating">
-      <div class="message-content">
-        <div class="message-icon">⏯️</div>
-        <h4>Presiona PLAY para ver métricas en tiempo real</h4>
-        <p>Las métricas de desplazamiento, velocidad y análisis de movimiento se activarán durante la reproducción</p>
-      </div>
-    </div>
+
   </div>
 
   <!-- ESTADO VACÍO -->
@@ -168,7 +160,7 @@
     <div class="empty-content">
       <div class="empty-icon">📊</div>
       <h3>Sin datos cargados</h3>
-      <p>Selecciona un archivo y haz clic en "Generar gráfica" para visualizar los datos</p>
+      <p>Selecciona un archivo y haz clic en "Generar gráfica" para visualizar los datos y dale play para ver las metricas</p>
     </div>
   </div>
 </div>
